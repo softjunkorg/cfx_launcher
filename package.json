@@ -90,6 +90,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@fontsource/inconsolata": "^4.5.10",
+    "@fontsource/raleway": "^4.5.12",
     "ansi-to-react": "^6.1.6",
     "antd": "^5.1.6",
     "country-codes-list": "^1.6.10",

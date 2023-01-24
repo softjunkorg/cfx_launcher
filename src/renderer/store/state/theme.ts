@@ -8,7 +8,7 @@ export const themeData = atom<ThemeConfig>({
     token: {
       colorPrimary: "#4a79ff",
       borderRadius: 4,
-      fontFamily: "Clash Display",
+      fontFamily: "Raleway",
     },
     algorithm: theme.darkAlgorithm,
   },
