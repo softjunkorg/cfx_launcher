@@ -1,0 +1,130 @@
+{
+  "TABS": {
+    "TERMINAL": "Terminal",
+    "RESOURCES": "Resources",
+    "INSTANCE_CONFIG": "Instance Config",
+    "SETTINGS": "Settings"
+  },
+  "HEADER": {
+    "TITLE": "Launcher"
+  },
+  "ACTIONS": {
+    "CANCEL": "Cancel",
+    "START": "Start",
+    "STOP": "Stop",
+    "RESTART": "Restart",
+    "REFRESH": "Refresh",
+    "SEND": "Send",
+    "BROWSE": "Browse",
+    "SAVE": "Save",
+    "DELETE": "Delete"
+  },
+  "STATUS": {
+    "WORD": "Status",
+    "STARTING": "Starting",
+    "STOPPED": "Stopped",
+    "STARTED": "Started"
+  },
+  "MESSAGES": {
+    "SERVER_ERROR": "The server threw an exception. Code: {{code}}",
+    "SERVER_STARTED": "Server started.",
+    "SERVER_START_SUCCESS": "Starting the server...",
+    "SERVER_START_ERROR": "An error happened on the start process.",
+    "SERVER_STOPPED": "The server is currently stopped.",
+    "SERVER_STOP_SUCCESS": "Stopping the server...",
+    "SERVER_STOP_ERROR": "An error happened on the stop process.",
+    "SERVER_RESTART_SUCCESS": "Restarting the server...",
+    "SERVER_RESTART_ERROR": "An error happened on the restart process.",
+    "SERVER_REFRESH_SUCCESS": "Refreshing the server...",
+    "SERVER_REFRESH_ERROR": "An error happened on the refresh process.",
+    "SERVER_EXECUTE_COMMAND_SUCCESS": "The command was successfully executed.",
+    "SERVER_EXECUTE_COMMAND_ERROR": "An error happened on the command execution.",
+    "UNEXPECTED_ERROR": "Unexpected error happened. {{error}}",
+    "RESOURCE_DELETED": "Resource {{resource}} was deleted."
+  },
+  "ERRORS": {
+    "FOLDER_DOESNT_EXISTS": "Folder doesn't exists.",
+    "NO_FOLDER_SET": "No folder set.",
+    "INVALID_RESOURCE": "Invalid resource."
+  },
+  "FIELDS": {
+    "SETTINGS": {
+      "ARTIFACTS_FOLDER": "Artifacts Folder",
+      "RESOURCES_FOLDER": "Resources Folder",
+      "INSTANCE_ARGUMENTS": "Instance Arguments",
+      "LANGUAGE": "Language"
+    }
+  },
+  "PLACEHOLDERS": {
+    "TYPEHERE": "Type in here...",
+    "SELECTHERE": "Select..."
+  },
+  "DIALOGS": {
+    "SERVER_STOP_HEADER": "Stop Action",
+    "SERVER_STOP_BODY": "Do you really want to stop the server?",
+    "SERVER_RESTART_HEADER": "Restart Action",
+    "SERVER_RESTART_BODY": "Do you really want to restart the server?"
+  },
+  "PANELS": {
+    "SERVER": "Server",
+    "PROJECT": {
+      "NAME": "Project",
+      "TAGS": {
+        "NAME": "Name",
+        "DESCRIPTION": "Description",
+        "LOCALE": "Locale",
+        "TAGS": "Tags"
+      }
+    },
+    "SERVER_PROPERTIES": {
+      "NAME": "Properties",
+      "TAGS": {
+        "HOSTNAME": "Hostname",
+        "GAMEBUILD": "Game Build",
+        "GAMENAME": "Game Name",
+        "PRIVATE": "Private",
+        "ONESYNC": "OneSync",
+        "SCRIPT_HOOK": "Script Hook"
+      }
+    },
+    "SERVER_CONNECTION": {
+      "NAME": "Connection",
+      "TAGS": {
+        "TCP_ENDPOINT": "TCP Endpoint",
+        "UDP_ENDPOINT": "UDP Endpoint",
+        "MAX_CLIENTS": "Max Clients",
+        "PURE_LEVEL": "Pure Level",
+        "ENDPOINT_PRIVACY": "Endpoint Privacy"
+      }
+    },
+    "SERVER_SECRET": {
+      "NAME": "Secret",
+      "TAGS": {
+        "STEAM_API_KEY": "Steam API Key",
+        "LICENSE_KEY": "License Key"
+      }
+    }
+  },
+  "BOOLEAN": {
+    "TRUE": "True",
+    "FALSE": "False"
+  },
+  "MODE": {
+    "ON": "On",
+    "OFF": "Off",
+    "DISABLED": "Disabled"
+  },
+  "BUILDS": {
+    "LATEST": "Latest"
+  },
+  "LANGUAGES": {
+    "pt-BR": {
+      "LOCAL_NAME": "Português do Brasil",
+      "UNIVERSAL_NAME": "Brazilian Portuguese"
+    },
+    "en-US": {
+      "LOCAL_NAME": "English, US",
+      "UNIVERSAL_NAME": "English, US"
+    }
+  }
+}
