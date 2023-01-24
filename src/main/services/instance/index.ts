@@ -1,14 +1,14 @@
 import { app } from "electron";
 import { spawn } from "child_process";
 import path from "path";
-import { window, store, wait } from "../../../main/utils";
+import { window, store, wait } from "../../utils";
 import {
   InstanceEvents,
   InstanceStatus,
   IResource,
   TInstanceProcess,
 } from "../../../types";
-import { TempConfig, TempResources } from "../../../main/handlers/instance";
+import { TempConfig, TempResources } from "../../handlers/instance";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;

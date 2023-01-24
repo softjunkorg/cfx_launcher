@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
 const { notarize } = require("@electron/notarize");
 const { build } = require("../../package.json");
 

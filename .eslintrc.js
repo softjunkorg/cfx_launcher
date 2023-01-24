@@ -1,6 +1,6 @@
 module.exports = {
   extends: [
-    "app",
+    "erb",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
   ],

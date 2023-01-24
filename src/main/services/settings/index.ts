@@ -1,6 +1,6 @@
 import { dialog } from "electron";
 import fs from "fs";
-import { window } from "../../../main/utils";
+import { window } from "../../utils";
 import { SettingsEvents } from "../../../types";
 
 // Listen to artifacts folder request
