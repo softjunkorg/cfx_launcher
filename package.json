@@ -192,6 +192,7 @@
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
       "dist",
+      "node_modules",
       "package.json"
     ],
     "afterSign": ".app/scripts/notarize.js",
