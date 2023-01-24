@@ -21,7 +21,7 @@ export default function useLoadingFields<T = IFields[] | boolean>(
 
   // Change field state as single
   function setSingleState(state: boolean) {
-    setLoading(state as T);
+    setLoading(state as unknown as T);
   }
 
   // Set object

@@ -15,5 +15,11 @@
     "allowJs": true,
     "outDir": ".app/dll"
   },
-  "exclude": ["test", "release/build", "release/app/dist", ".app/dll"]
+  "exclude": [
+    "test",
+    "release/build",
+    "release/app/dist",
+    ".app/dll",
+    "node_modules"
+  ]
 }

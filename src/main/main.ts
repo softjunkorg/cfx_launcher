@@ -41,7 +41,7 @@ function createWindow() {
   window.loadURL(directories.resolveHtmlPath("index.html"));
 
   // Setting the global
-  global.renderWindow = window;
+  (global as any).renderWindow = window;
 }
 
 app.on("ready", () => {
