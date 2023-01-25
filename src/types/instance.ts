@@ -19,4 +19,10 @@ export enum InstanceEvents {
   SAVE_DATA = "INSTACE::SAVE_DATA",
 }
 
+export enum InstanceErrors {
+  ARTIFACTS_FOLDER_ERROR = "ERROR::INSTANCE_ARTIFACTS_FOLDER_ERROR",
+  RESOURCES_FOLDER_ERROR = "ERROR::INSTANCE_RESOURCES_FOLDER_ERROR",
+  NOT_RUNNING = "ERROR::INSTANCE_NOT_RUNNING",
+}
+
 export type TInstanceProcess = ChildProcessWithoutNullStreams | null;

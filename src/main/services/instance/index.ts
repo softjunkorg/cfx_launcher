@@ -1,15 +1,16 @@
 import { spawn } from "child_process";
 import { app } from "electron";
+import fs from "fs";
 import path from "path";
-import stripAnsi from "strip-ansi";
 import {
+  InstanceErrors,
   InstanceEvents,
   InstanceStatus,
   IResource,
   TInstanceProcess,
 } from "../../../types";
 import { TempConfig, TempResources } from "../../handlers/instance";
-import { store, wait, window } from "../../utils";
+import { ansi, store, wait, window } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -25,7 +26,7 @@ async function stopInstance() {
     (instanceStatus !== InstanceStatus.RUNNING &&
       instanceStatus !== InstanceStatus.STARTING)
   )
-    return false;
+    return [false, InstanceErrors.NOT_RUNNING];
 
   // Killing the task
   await instanceProcess.kill();
@@ -54,14 +55,10 @@ async function startInstance() {
   const instanceConfig = store.get("instanceConfig");
 
   // Checking for directory
-  if (
-    !artifactsFolder ||
-    !resourcesFolder ||
-    !resources ||
-    !instanceConfig ||
-    instanceProcess
-  )
-    return false;
+  if (!artifactsFolder || !fs.existsSync(artifactsFolder))
+    return [false, InstanceErrors.ARTIFACTS_FOLDER_ERROR];
+  if (!resourcesFolder || !fs.existsSync(resourcesFolder))
+    return [false, InstanceErrors.RESOURCES_FOLDER_ERROR];
 
   // Creating temporaty config and resources
   instanceTempConfig = new TempConfig(instanceConfig, artifactsFolder);
@@ -113,9 +110,9 @@ async function startInstance() {
     if (currentLine.includes("\n", currentLine.length - 1)) {
       // Checking if instance is running
       if (
-        stripAnsi(currentLine).includes(
-          "[ citizen-server-impl] Authenticated with cfx.re Nucleus:"
-        )
+        ansi
+          .strip(currentLine)
+          .includes("[ citizen-server-impl] Authenticated with cfx.re Nucleus:")
       ) {
         renderWindow.setProgressBar(0);
         window.request(InstanceEvents.RUNNING);
@@ -154,7 +151,7 @@ async function startInstance() {
   window.request(InstanceEvents.STARTING);
   instanceStatus = InstanceStatus.STARTING;
 
-  return true;
+  return [true, null];
 }
 
 window.listen(InstanceEvents.START, startInstance);
@@ -167,13 +164,13 @@ async function restartInstance() {
     !instanceTempResources ||
     instanceStatus !== InstanceStatus.RUNNING
   )
-    return false;
+    return [false, InstanceErrors.NOT_RUNNING];
 
   // Restarting the instance
   await stopInstance();
   await startInstance();
 
-  return true;
+  return [true, null];
 }
 
 window.listen(InstanceEvents.RESTART, restartInstance);
@@ -189,13 +186,13 @@ async function executeInstanceCommand(
     !instanceTempResources ||
     instanceStatus !== InstanceStatus.RUNNING
   )
-    return false;
+    return [false, InstanceErrors.NOT_RUNNING];
 
   // Executing the commnad
   instanceProcess.stdin.write(`${command}\n`);
   // window.request("INSTANCE_COMMAND_EXECUTED", command);
 
-  return true;
+  return [true, null];
 }
 
 window.listen(InstanceEvents.EXECUTE_COMMAND, executeInstanceCommand);

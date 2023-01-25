@@ -3,8 +3,10 @@ import EventEmitter from "eventemitter3";
 const eventEmitter = new EventEmitter();
 
 const Emitter = {
-  on: (event: string, fn: (...args: any[]) => void) =>
-    eventEmitter.on(event, fn),
+  on: (event: string, fn: (...args: any[]) => void) => {
+    eventEmitter.on(event, fn);
+    return fn;
+  },
   once: (event: string, fn: (...args: any[]) => void) =>
     eventEmitter.once(event, fn),
   off: (event: string, fn: (...args: any[]) => void) =>

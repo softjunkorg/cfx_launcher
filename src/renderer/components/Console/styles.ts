@@ -4,7 +4,7 @@ export const Main = styled.div`
   width: 100%;
   height: 100%;
   background: ${(props) => props.theme.colorFillAlter};
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.borderRadius};
   display: flex;
   padding: 10px;
   flex-direction: column;
@@ -14,14 +14,19 @@ export const Main = styled.div`
   overflow: hidden;
 `;
 
-export const Messages = styled.div`
+interface IMessagesProps {
+  scroll: boolean;
+}
+
+export const Messages = styled.div<IMessagesProps>`
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 5px;
-  overflow-y: scroll;
+  overflow-y: ${(props) => (props.scroll ? "scroll" : "hidden")};
   white-space: pre-wrap;
+  position: relative;
 
   & code span {
     font-size: 16px;
@@ -39,14 +44,13 @@ export const StoppedMessage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.1);
 `;
 
 export const Messenger = styled.div`
   width: 100%;
   min-height: 40px;
   background: ${(props) => props.theme.colorFillAlter};
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.borderRadius};
   display: flex;
   align-items: center;
   padding: 7.5px;

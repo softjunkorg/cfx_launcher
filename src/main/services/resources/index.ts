@@ -1,4 +1,5 @@
-import fs from "fs/promises";
+import fs from "fs";
+import fsp from "fs/promises";
 import path from "path";
 import { IResource, ResourcesErrors, ResourcesEvents } from "../../../types";
 import { InstanceResources } from "../../handlers/resources";
@@ -9,14 +10,8 @@ async function fetchResources() {
   const folder = store.get("settings.resourcesFolder") as string;
 
   // Checking runtime
-  if (!folder) return [false, ResourcesErrors.NO_FOLDER_SET];
-  if (
-    !(await fs
-      .access(folder)
-      .then(() => true)
-      .catch(() => false))
-  )
-    return [false, ResourcesErrors.FOLDER_DOESNT_EXISTS];
+  if (!folder || !fs.existsSync(folder))
+    return [false, ResourcesErrors.FOLDER_ERROR];
 
   const resources = new InstanceResources(folder); // Fetching the resources
 
@@ -27,25 +22,20 @@ window.listen(ResourcesEvents.FETCH, fetchResources);
 
 // Listen to resource delete request
 async function deleteResource(_: any, name: string) {
-  const resourcesFolder = store.get("settings.resourcesFolder") as string;
+  const folder = store.get("settings.resourcesFolder") as string;
   const resource = store
     .get("resources")
     .find((s) => s.name === name) as IResource;
 
   // Checking runtime
-  if (!resource || !resourcesFolder)
+  if (!folder || !fs.existsSync(folder))
+    return [false, ResourcesErrors.FOLDER_ERROR];
+  if (!resource || !fs.existsSync(path.join(folder, resource.path)))
     return [false, ResourcesErrors.INVALID_RESOURCE];
-  if (
-    !(await fs
-      .access(path.join(resourcesFolder, resource.path))
-      .then(() => true)
-      .catch(() => false))
-  )
-    return [false, ResourcesErrors.FOLDER_DOESNT_EXISTS];
 
   // Deleting the resources
   try {
-    await fs.rm(path.join(resourcesFolder, resource.path), {
+    await fsp.rm(path.join(folder, resource.path), {
       recursive: true,
     });
 

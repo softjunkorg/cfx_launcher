@@ -1,5 +1,5 @@
 import { App } from "antd";
-import { InstanceEvents, InstanceStatus } from "types";
+import { InstanceErrors, InstanceEvents, InstanceStatus } from "types";
 import { useRecoilState } from "recoil";
 import { useTranslation } from "react-i18next";
 import { application } from "renderer/services";
@@ -13,17 +13,34 @@ export default function useInstanceActions() {
   const start = async () => {
     if (status === InstanceStatus.STOPPED) {
       const result = await application.request(InstanceEvents.START);
-      if (result) {
+      if (result[0]) {
         setStatus(InstanceStatus.STARTING);
         message.open({
           type: "success",
           content: t("MESSAGES.SERVER_START_SUCCESS"),
         });
       } else {
-        message.open({
-          type: "error",
-          content: t("MESSAGES.SERVER_START_ERROR"),
-        });
+        switch (result[1]) {
+          case InstanceErrors.ARTIFACTS_FOLDER_ERROR:
+            message.open({
+              type: "error",
+              content: t("ERRORS.INSTANCE.ARTIFACTS_FOLDER_ERROR"),
+            });
+            break;
+
+          case InstanceErrors.RESOURCES_FOLDER_ERROR:
+            message.open({
+              type: "error",
+              content: t("ERRORS.INSTANCE.RESOURCES_FOLDER_ERROR"),
+            });
+            break;
+
+          default:
+            message.open({
+              type: "error",
+              content: t("MESSAGES.SERVER_STOP_ERROR"),
+            });
+        }
       }
     }
   };
@@ -34,7 +51,7 @@ export default function useInstanceActions() {
       status === InstanceStatus.STARTING
     ) {
       const result = await application.request(InstanceEvents.STOP);
-      if (result) {
+      if (result[0]) {
         setStatus(InstanceStatus.STOPPED);
         message.open({
           type: "info",
@@ -43,7 +60,7 @@ export default function useInstanceActions() {
       } else {
         message.open({
           type: "error",
-          content: t("MESSAGES.SERVER_STOP_ERROR"),
+          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
         });
       }
     }
@@ -52,7 +69,7 @@ export default function useInstanceActions() {
   const restart = async () => {
     if (status === InstanceStatus.RUNNING) {
       const result = await application.request(InstanceEvents.RESTART);
-      if (result) {
+      if (result[0]) {
         setStatus(InstanceStatus.STARTING);
         message.open({
           type: "success",
@@ -61,7 +78,7 @@ export default function useInstanceActions() {
       } else {
         message.open({
           type: "error",
-          content: t("MESSAGES.SERVER_RESTART_ERROR"),
+          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
         });
       }
     }
@@ -73,7 +90,7 @@ export default function useInstanceActions() {
         InstanceEvents.EXECUTE_COMMAND,
         "refresh"
       );
-      if (result) {
+      if (result[0]) {
         message.open({
           type: "success",
           content: t("MESSAGES.SERVER_REFRESH_SUCCESS"),
@@ -81,7 +98,7 @@ export default function useInstanceActions() {
       } else {
         message.open({
           type: "error",
-          content: t("MESSAGES.SERVER_REFRESH_ERROR"),
+          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
         });
       }
     }
@@ -93,7 +110,7 @@ export default function useInstanceActions() {
         InstanceEvents.EXECUTE_COMMAND,
         command
       );
-      if (result) {
+      if (result[0]) {
         message.open({
           type: "success",
           content: t("MESSAGES.SERVER_EXECUTE_COMMAND_SUCCESS"),
@@ -101,7 +118,7 @@ export default function useInstanceActions() {
       } else {
         message.open({
           type: "error",
-          content: t("MESSAGES.SERVER_EXECUTE_COMMAND_ERROR"),
+          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
         });
       }
     }

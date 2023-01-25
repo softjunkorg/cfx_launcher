@@ -71,19 +71,18 @@ const Console: FC = () => {
 
   return (
     <Main>
-      {/* Stop Message */}
-      {isStopped && (
-        <StoppedMessage>
-          <Result
-            status="error"
-            title={t("STATUS.STOPPED")}
-            subTitle={t("MESSAGES.SERVER_STOPPED")}
-          />
-        </StoppedMessage>
-      )}
-
       {/* Messages */}
-      <Messages>
+      <Messages scroll={!isStopped}>
+        {/* Stop Message */}
+        {isStopped && (
+          <StoppedMessage>
+            <Result
+              status="error"
+              title={t("STATUS.STOPPED")}
+              subTitle={t("MESSAGES.SERVER_STOPPED")}
+            />
+          </StoppedMessage>
+        )}
         {(isStarting || isRunning) &&
           messages.map((row) => <Line key={Math.random()}>{row}</Line>)}
         <div ref={lastMessageRef} />

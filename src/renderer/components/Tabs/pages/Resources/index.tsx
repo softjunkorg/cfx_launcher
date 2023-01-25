@@ -3,7 +3,7 @@ import { useStoreActions } from "renderer/store/actions";
 import { DeleteOutlined } from "@ant-design/icons";
 import { IResource, ResourcesErrors, ResourcesEvents } from "types";
 import { App, Breadcrumb, Button, Switch, Table, Tooltip } from "antd";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
 import { Main } from "../sharedStyles";
@@ -35,77 +35,55 @@ const Resources: FC & IResourcesExtraActions = () => {
   // Handling resources addition
   const handleAddResources = (resources: IResource[]) => {
     if (resources && store.resources) {
-      const discovered: IResource[] = [];
-      const deleted: string[] = [];
-
-      // Mapping resources
-      resources.map((row) => {
-        const match = store.resources.find((s) => s.name === row.name);
-
-        if (!match) {
-          discovered.push({
-            name: row.name,
-            path: store.settings.resourcesFolder
-              ? row.path.replace(`${store.settings.resourcesFolder}\\`, "")
-              : row.path,
-            active: true,
-          });
-          return true;
-        }
-
-        return false;
+      const replicated = resources.map((row) => {
+        const match = store.resources.find((r) => r.name === row.name) || null;
+        return {
+          name: row.name,
+          path: store.settings.resourcesFolder
+            ? row.path.replace(`${store.settings.resourcesFolder}\\`, "")
+            : row.path,
+          active: match ? match?.active : true,
+        };
       });
 
-      // Checking discovered
-      if (discovered.length > 0) {
-        changeStore({
-          resources: [...store.resources, ...discovered],
-        });
-      }
-
-      // Mapping store resources
-      store.resources.map((row) => {
-        const match = resources.find((s) => s.name === row.name);
-
-        if (!match) {
-          deleted.push(row.name);
-          return true;
-        }
-
-        return false;
+      // Setting the store
+      changeStore({
+        resources: replicated,
       });
-
-      // Checking deleted
-      if (deleted.length > 0) {
-        changeStore({
-          resources: store.resources.filter((r) => !deleted.includes(r.name)),
-        });
-      }
     }
   };
 
   // Handling fetch resources
-  const handleFetch = async () => {
+  const handleFetch = async (report?: boolean) => {
     const response = await application.request(ResourcesEvents.FETCH);
 
+    console.log(response[0]);
+
     // Handling the response
-    if (response && response[0]) {
-      return handleAddResources(response[1]);
+    if (response[0]) {
+      handleAddResources(response[1]);
+    } else {
+      changeStore({
+        resources: [],
+      });
     }
 
-    switch (response[0]) {
-      case ResourcesErrors.FOLDER_DOESNT_EXISTS:
-        return "Doesnt Exists";
-        break;
+    // Reporting any errors
+    if (report) {
+      switch (response[1]) {
+        case ResourcesErrors.FOLDER_ERROR:
+          message.open({
+            type: "error",
+            content: t("ERRORS.RESOURCES.FOLDER_ERROR"),
+          });
+          break;
 
-      case ResourcesErrors.NO_FOLDER_SET:
-        return "No folder set";
-        break;
-
-      default:
-        return "Error not found.";
-        break;
+        default:
+          break;
+      }
     }
+
+    return true;
   };
 
   // Handling active change
@@ -148,16 +126,19 @@ const Resources: FC & IResourcesExtraActions = () => {
     }
   };
 
-  // Handling first fetch
   useEffect(() => {
-    handleFetch();
-    events.on(ResourcesEvents.REFRESH, handleFetch);
-  }, []);
+    const refreshListener = events.on(ResourcesEvents.REFRESH, handleFetch);
+
+    // Cleaning up
+    return () => {
+      events.off(ResourcesEvents.REFRESH, refreshListener);
+    };
+  }, [store.resources]);
 
   // Handling resource folder changes
   useEffect(() => {
-    handleFetch();
-  }, [store.settings]);
+    handleFetch(); // Initial Fetch
+  }, [store.settings.resourcesFolder]);
 
   return (
     <Main>

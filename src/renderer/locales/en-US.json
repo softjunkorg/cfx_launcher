@@ -43,9 +43,15 @@
     "RESOURCE_DELETED": "Resource {{resource}} was deleted."
   },
   "ERRORS": {
-    "FOLDER_DOESNT_EXISTS": "Folder doesn't exists.",
-    "NO_FOLDER_SET": "No folder set.",
-    "INVALID_RESOURCE": "Invalid resource."
+    "INSTANCE": {
+      "ARTIFACTS_FOLDER_ERROR": "Artifacts folder doesn't exist or is not set.",
+      "RESOURCES_FOLDER_ERROR": "Resources folder doesn't exist or is not set.",
+      "NOT_RUNNING": "Instance is not running yet."
+    },
+    "RESOURCES": {
+      "FOLDER_ERROR": "Resources folder doesn't exist or is not set.",
+      "INVALID_RESOURCE": "The resource {{resource}} doesn't exist."
+    }
   },
   "FIELDS": {
     "SETTINGS": {
