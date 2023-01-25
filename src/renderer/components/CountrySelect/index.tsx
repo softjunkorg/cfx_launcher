@@ -18,7 +18,9 @@ const CountrySelect: FC<IContrySelectProps> = (props) => {
       {...props}
     >
       {CountryCodes.all()
-        .filter((c) => (countries ? countries.includes(c.countryCode) : true))
+        .filter((c) =>
+          countries.length > 0 ? countries.includes(c.countryCode) : true
+        )
         .map((c) => (
           <Select.Option
             key={`${c.officialLanguageCode}-${c.countryCode}`}

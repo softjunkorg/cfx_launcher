@@ -37,6 +37,7 @@ const config = {
         sv_endpointPrivacy: false,
         steam_webApiKey: null,
         sv_licenseKey: "changeme",
+        load_server_icon: null,
       },
       resources: [] as IResource[],
       settings: {
@@ -67,6 +68,7 @@ const config = {
       sv_endpointPrivacy: "boolean",
       steam_webApiKey: "string",
       sv_licenseKey: "string",
+      load_server_icon: "string",
     },
   },
 };
