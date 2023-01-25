@@ -1,7 +1,7 @@
-import { app } from "electron";
 import { spawn } from "child_process";
+import { app } from "electron";
 import path from "path";
-import { window, store, wait } from "../../utils";
+import stripAnsi from "strip-ansi";
 import {
   InstanceEvents,
   InstanceStatus,
@@ -9,6 +9,7 @@ import {
   TInstanceProcess,
 } from "../../../types";
 import { TempConfig, TempResources } from "../../handlers/instance";
+import { store, wait, window } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -82,17 +83,50 @@ async function startInstance() {
   );
 
   // Subscribe for terminal data
+  let currentLine = "";
   const onData = (data: any) => {
     const message = data.toString();
 
-    // Checking if instance is running
-    if (message.includes("Authenticated with cfx.re")) {
-      renderWindow.setProgressBar(0);
-      window.request(InstanceEvents.RUNNING);
-      instanceStatus = InstanceStatus.RUNNING;
+    function matchBreaks() {
+      let count = 0;
+
+      [...message.matchAll(/\n/g)].forEach((row) => {
+        if (row.index !== message.length - 1) {
+          count += 1;
+        }
+      });
+
+      return count;
     }
 
-    window.request(InstanceEvents.MESSAGE, message); // Sending the data
+    if (matchBreaks() > 0) {
+      const map = message.split("\n");
+      return map.forEach((m: any, i: number) =>
+        onData(`${m}${i + 1 !== map.length ? "\n" : ""}`)
+      );
+    }
+
+    // Adding the line
+    currentLine += message;
+
+    // Checking the last break line
+    if (currentLine.includes("\n", currentLine.length - 1)) {
+      // Checking if instance is running
+      if (
+        stripAnsi(currentLine).includes(
+          "[ citizen-server-impl] Authenticated with cfx.re Nucleus:"
+        )
+      ) {
+        renderWindow.setProgressBar(0);
+        window.request(InstanceEvents.RUNNING);
+        instanceStatus = InstanceStatus.RUNNING;
+      }
+
+      window.request(InstanceEvents.MESSAGE, currentLine); // Sending the data
+      currentLine = "";
+    }
+
+    return true;
   };
 
   instanceProcess.stdout.on("data", onData);

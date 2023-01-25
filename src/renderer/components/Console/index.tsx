@@ -23,7 +23,7 @@ const Console: FC = () => {
   const { executeCommand } = useInstanceActions();
   const { isStarting, isRunning, isStopped } = useInstanceStatus();
   const [, setStatus] = useRecoilState(instanceStatus);
-  const [messages, setMessages] = useState<string>("");
+  const [messages, setMessages] = useState<string[]>([]);
   const [command, setCommand] = useState<string>("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
@@ -40,12 +40,12 @@ const Console: FC = () => {
     const messageListener = application.listen(
       InstanceEvents.MESSAGE,
       (event, data: string) => {
-        setMessages((store) => store + data);
+        setMessages((store) => [...store, data]);
       }
     );
 
     const stopListener = application.listen(InstanceEvents.STOPPED, () => {
-      setMessages("");
+      setMessages([]);
     });
 
     // Cleanup
@@ -85,9 +85,7 @@ const Console: FC = () => {
       {/* Messages */}
       <Messages>
         {(isStarting || isRunning) &&
-          messages
-            .split("\n")
-            .map((row) => <Line key={Math.random()}>{row}</Line>)}
+          messages.map((row) => <Line key={Math.random()}>{row}</Line>)}
         <div ref={lastMessageRef} />
       </Messages>
 
