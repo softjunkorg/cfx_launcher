@@ -2,32 +2,39 @@
 /* eslint-disable global-require */
 import { app, BrowserWindow } from "electron";
 import path from "path";
-import { directories } from "./utils";
+import { directories, store } from "./utils";
 import AutoUpdater from "./handlers/autoupdate";
+import config from "../config";
 
 // Check debug
 const isDebug =
   process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
 
+// Adding debug
 if (isDebug) {
   require("electron-debug")();
 }
 
-function createWindow() {
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, "assets")
-    : path.join(__dirname, "../../assets");
+// Getting resources
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "assets")
+  : path.join(__dirname, "../../assets");
 
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
+function createWindow() {
+  // Getting default window size
+  const width = store.get("app.windowSize.width") as number;
+  const height = store.get("app.windowSize.height") as number;
 
   // Creating the window
   const window = new BrowserWindow({
-    minWidth: 800,
-    width: 800,
-    minHeight: 500,
-    height: 500,
+    width, // Dynamic width
+    height, // Dynamic height
+    minWidth: config.sharedStore.default.app.windowSize.width,
+    minHeight: config.sharedStore.default.app.windowSize.height,
     frame: false,
     icon: getAssetPath("icon.png"),
     autoHideMenuBar: true,

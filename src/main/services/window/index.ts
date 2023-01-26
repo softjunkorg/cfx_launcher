@@ -1,5 +1,6 @@
+import { screen } from "electron";
 import { WindowEvents } from "../../../types";
-import { window } from "../../utils";
+import { store, window } from "../../utils";
 
 // Check the maximized state
 renderWindow.on("maximize", () => window.request(WindowEvents.MAXIMIZED, true));
@@ -25,4 +26,10 @@ window.listen(WindowEvents.MAXIMIZE, () => {
 // Listening to window close
 window.listen(WindowEvents.CLOSE, () => {
   renderWindow.close();
+});
+
+// Listening to window resize
+renderWindow.on("resize", () => {
+  const { width, height } = renderWindow.getBounds();
+  store.set("app.windowSize", { width, height });
 });

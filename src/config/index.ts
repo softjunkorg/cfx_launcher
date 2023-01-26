@@ -49,6 +49,12 @@ const config = {
         instanceArguments: null,
         language: "en-US",
       },
+      app: {
+        windowSize: {
+          width: 1100,
+          height: 600,
+        },
+      },
     },
   },
   languages: ["pt-BR", "en-US"],
