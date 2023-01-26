@@ -23,7 +23,6 @@ import {
   UploadChangeParam,
   UploadFile,
 } from "antd/es/upload/interface";
-import { resizeImage } from "renderer/utils";
 import { Panel, FullSpace, UploadContainer, UploadImage } from "./styles";
 
 type PanelConfigReplicated = { [x: string]: any };

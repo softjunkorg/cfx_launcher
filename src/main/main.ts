@@ -3,6 +3,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import { directories } from "./utils";
+import AutoUpdater from "./handlers/autoupdate";
 
 // Check debug
 const isDebug =
@@ -21,6 +22,7 @@ function createWindow() {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  // Creating the window
   const window = new BrowserWindow({
     minWidth: 800,
     width: 800,
@@ -42,12 +44,22 @@ function createWindow() {
 
   // Setting the global
   (global as any).renderWindow = window;
+
+  // Enabling auto updater
+  // eslint-disable-next-line
+  new AutoUpdater();
 }
 
-app.on("ready", () => {
-  createWindow(); // Creating the window
-  require("./services"); // Setting up services
-});
+app
+  .whenReady()
+  .then(() => {
+    createWindow(); // Creating the window
+    require("./services"); // Setting up services
+    return true;
+  })
+  .catch((err) => {
+    throw new Error(err);
+  });
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {

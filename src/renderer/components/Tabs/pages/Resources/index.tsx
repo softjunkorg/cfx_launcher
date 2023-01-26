@@ -3,7 +3,7 @@ import { useStoreActions } from "renderer/store/actions";
 import { DeleteOutlined } from "@ant-design/icons";
 import { IResource, ResourcesErrors, ResourcesEvents } from "types";
 import { App, Breadcrumb, Button, Switch, Table, Tooltip } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
 import { Main } from "../sharedStyles";
@@ -56,8 +56,6 @@ const Resources: FC & IResourcesExtraActions = () => {
   // Handling fetch resources
   const handleFetch = async (report?: boolean) => {
     const response = await application.request(ResourcesEvents.FETCH);
-
-    console.log(response[0]);
 
     // Handling the response
     if (response[0]) {
