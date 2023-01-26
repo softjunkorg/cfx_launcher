@@ -1,13 +1,30 @@
 /* eslint-disable no-nested-ternary */
 import { ReactNode, FC, useEffect } from "react";
-import { Collapse, Col, Row, Input, Select, InputNumber } from "antd";
+import {
+  Collapse,
+  Col,
+  Row,
+  Input,
+  Select,
+  InputNumber,
+  Upload,
+  App,
+} from "antd";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import Field from "renderer/components/Field";
 import CountrySelect from "renderer/components/CountrySelect";
 import merge from "deepmerge";
 import baseConfig from "config";
-import { Panel, FullSpace } from "./styles";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { useLoadingFields } from "renderer/hooks";
+import {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+} from "antd/es/upload/interface";
+import { resizeImage } from "renderer/utils";
+import { Panel, FullSpace, UploadContainer, UploadImage } from "./styles";
 
 type PanelConfigReplicated = { [x: string]: any };
 
@@ -74,6 +91,75 @@ const defaultConfiguration: IPanelConfig[] = [
     key: "project",
     name: "PANELS.PROJECT.NAME",
     useChildren: (t, replicated, setReplicated) => {
+      const { message } = App.useApp();
+      const [loading, setLoading] = useLoadingFields({ icon: false });
+
+      // Default upload content
+      const uploadContent = (
+        <div>
+          {loading.icon ? <LoadingOutlined /> : <PlusOutlined />}
+          <div style={{ marginTop: 4 }}>{t("ACTIONS.UPLOAD")}</div>
+        </div>
+      );
+
+      // Get base64 for image upload
+      const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+        const reader = new FileReader();
+
+        // On reader load
+        reader.addEventListener("load", () =>
+          callback(reader.result as string)
+        );
+
+        reader.readAsDataURL(img);
+      };
+
+      // Handling before the upload
+      const handleBeforeUpload = (file: RcFile) => {
+        // Runtime Check
+        if (
+          file.type !== "image/jpeg" &&
+          file.type !== "image/png" &&
+          file.type !== "image/gif"
+        ) {
+          message.open({
+            type: "error",
+            content: t("ERRORS.UPLOAD.IMAGE_EXTENSION"),
+          });
+          return false;
+        }
+        if (!(file.size / 1024 / 1024 < 10)) {
+          message.open({
+            type: "error",
+            content: t("ERRORS.UPLOAD.SIZE_UPLOAD"),
+          });
+          return false;
+        }
+
+        return true;
+      };
+
+      // Handling the upload
+      const handleUpload = async (
+        info: UploadChangeParam<UploadFile>,
+        field: string
+      ) => {
+        // Once status is uploading
+        if (info.file.status === "uploading") {
+          setLoading(field, true);
+          return;
+        }
+
+        // Once status is done
+        if (info.file.status === "done") {
+          // Finishing with base64 decryption
+          getBase64(info.file.originFileObj as RcFile, (url) => {
+            setLoading(field, false);
+            setReplicated({ [field]: url });
+          });
+        }
+      };
+
       return (
         <FullSpace direction="vertical" size="middle">
           {/* Project Name */}
@@ -151,6 +237,72 @@ const defaultConfiguration: IPanelConfig[] = [
                   />
                 }
               />
+            </Col>
+          </Row>
+          <Row gutter={[16, 0]}>
+            {/* Project Icon */}
+            <Col flex="124px">
+              <Field
+                label={t("PANELS.PROJECT.TAGS.ICON")}
+                component={
+                  <Upload.Dragger
+                    openFileDialogOnClick
+                    listType="picture-card"
+                    height={108}
+                    showUploadList={false}
+                    customRequest={({ onSuccess }) => {
+                      if (onSuccess) onSuccess("ok");
+                    }}
+                    beforeUpload={handleBeforeUpload}
+                    onChange={(data) => handleUpload(data, "load_server_icon")}
+                  >
+                    {replicated.load_server_icon ? (
+                      <UploadContainer>
+                        <UploadImage src={replicated.load_server_icon} />
+                      </UploadContainer>
+                    ) : (
+                      uploadContent
+                    )}
+                  </Upload.Dragger>
+                }
+              />
+            </Col>
+            {/* Project Banner Detail */}
+            <Col flex="auto">
+              <Row gutter={[0, 16]}>
+                <Col span={24}>
+                  <Field
+                    label={t("PANELS.PROJECT.TAGS.BANNER_DETAIL")}
+                    component={
+                      <Input
+                        placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
+                        value={replicated.banner_detail}
+                        onInput={(e) =>
+                          setReplicated({
+                            banner_detail: e.currentTarget.value,
+                          })
+                        }
+                      />
+                    }
+                  />
+                </Col>
+                <Col span={24}>
+                  <Field
+                    label={t("PANELS.PROJECT.TAGS.BANNER_CONNECTING")}
+                    component={
+                      <Input
+                        placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
+                        value={replicated.banner_connecting}
+                        onInput={(e) =>
+                          setReplicated({
+                            banner_connecting: e.currentTarget.value,
+                          })
+                        }
+                      />
+                    }
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
         </FullSpace>

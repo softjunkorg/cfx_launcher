@@ -1,5 +1,5 @@
 import "@fontsource/inconsolata/600.css";
-import "@fontsource/unbounded";
+import "@fontsource/unbounded/300.css";
 import i18next from "i18next";
 import { FC, useEffect } from "react";
 import Header from "renderer/components/Header";

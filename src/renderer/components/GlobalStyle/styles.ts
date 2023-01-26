@@ -71,4 +71,9 @@ export const Main = createGlobalStyle`
     right: 8px;
     width: fit-content;
   }
+
+  // Fix Antd Upload
+  .ant-upload {
+    padding: 0 !important;
+  }
 `;

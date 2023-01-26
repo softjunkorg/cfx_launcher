@@ -38,11 +38,14 @@ const config = {
         steam_webApiKey: null,
         sv_licenseKey: "changeme",
         load_server_icon: null,
+        banner_detail: null,
+        banner_connecting: null,
       },
       resources: [] as IResource[],
       settings: {
         artifactsFolder: null,
         resourcesFolder: null,
+        cacheFolder: null,
         instanceArguments: null,
         language: "en-US",
       },
@@ -69,6 +72,8 @@ const config = {
       steam_webApiKey: "string",
       sv_licenseKey: "string",
       load_server_icon: "string",
+      banner_detail: "string",
+      banner_connecting: "string",
     },
   },
 };

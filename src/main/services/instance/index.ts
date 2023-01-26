@@ -10,7 +10,7 @@ import {
   TInstanceProcess,
 } from "../../../types";
 import { TempConfig, TempResources } from "../../handlers/instance";
-import { ansi, store, wait, window } from "../../utils";
+import { ansi, store, wait, window, cache } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -41,7 +41,7 @@ async function stopInstance() {
   window.request(InstanceEvents.STOPPED);
   instanceStatus = InstanceStatus.STOPPED;
 
-  return true;
+  return [true, null];
 }
 
 window.listen(InstanceEvents.STOP, stopInstance);
@@ -61,7 +61,11 @@ async function startInstance() {
     return [false, InstanceErrors.RESOURCES_FOLDER_ERROR];
 
   // Creating temporaty config and resources
-  instanceTempConfig = new TempConfig(instanceConfig, artifactsFolder);
+  instanceTempConfig = new TempConfig(
+    instanceConfig,
+    artifactsFolder,
+    cache.getFolder()
+  );
   instanceTempResources = new TempResources(
     resources.filter((r) => r.active === true).map((r) => `ensure ${r.name}`),
     artifactsFolder

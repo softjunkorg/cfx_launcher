@@ -17,7 +17,8 @@
     "SEND": "Send",
     "BROWSE": "Browse",
     "SAVE": "Save",
-    "DELETE": "Delete"
+    "DELETE": "Delete",
+    "UPLOAD": "Upload"
   },
   "STATUS": {
     "WORD": "Status",
@@ -51,6 +52,10 @@
     "RESOURCES": {
       "FOLDER_ERROR": "Resources folder doesn't exist or is not set.",
       "INVALID_RESOURCE": "The resource {{resource}} doesn't exist."
+    },
+    "UPLOAD": {
+      "IMAGE_EXTENSION": "You can only upload JPG/PNG/GIF file.",
+      "SIZE_UPLOAD": "Image must smaller than 10MB!"
     }
   },
   "FIELDS": {
@@ -79,7 +84,10 @@
         "NAME": "Name",
         "DESCRIPTION": "Description",
         "LOCALE": "Locale",
-        "TAGS": "Tags"
+        "TAGS": "Tags",
+        "ICON": "Icon",
+        "BANNER_CONNECTING": "Banner Connecting",
+        "BANNER_DETAIL": "Banner Detail"
       }
     },
     "SERVER_PROPERTIES": {

@@ -15,3 +15,19 @@ export const Panel = styled(Collapse.Panel)`
 export const FullSpace = styled(Space)`
   width: 100%;
 `;
+
+export const UploadContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+`;
+
+export const UploadImage = styled.img`
+  width: 100%;
+  height: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+`;
