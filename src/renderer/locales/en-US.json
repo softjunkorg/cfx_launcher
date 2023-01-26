@@ -64,6 +64,12 @@
       "RESOURCES_FOLDER": "Resources Folder",
       "INSTANCE_ARGUMENTS": "Instance Arguments",
       "LANGUAGE": "Language"
+    },
+    "COMMON": {
+      "NAME": "Name",
+      "PATH": "Path",
+      "ACTION": "Action",
+      "ACTIVE": "Active"
     }
   },
   "PLACEHOLDERS": {
@@ -74,7 +80,9 @@
     "SERVER_STOP_HEADER": "Stop Action",
     "SERVER_STOP_BODY": "Do you really want to stop the server?",
     "SERVER_RESTART_HEADER": "Restart Action",
-    "SERVER_RESTART_BODY": "Do you really want to restart the server?"
+    "SERVER_RESTART_BODY": "Do you really want to restart the server?",
+    "RESOURCE_DELETE_HEADER": "Delete Action",
+    "RESOURCE_DELETE_BODY": "Do you really want to delete the resource {{resource}}?"
   },
   "PANELS": {
     "SERVER": "Server",

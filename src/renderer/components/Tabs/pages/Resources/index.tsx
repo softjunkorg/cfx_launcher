@@ -30,7 +30,7 @@ interface IResourcesExtraActions {
 const Resources: FC & IResourcesExtraActions = () => {
   const { t } = useTranslation();
   const { store, changeStore } = useStoreActions();
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
 
   // Handling resources addition
   const handleAddResources = (resources: IResource[]) => {
@@ -98,30 +98,40 @@ const Resources: FC & IResourcesExtraActions = () => {
 
   // Delete
   const handleDelete = async (resource: string) => {
-    const data = store.resources.find((r) => r.name === resource);
-    if (data) {
-      const response = await application.request(
-        ResourcesEvents.DELETE,
-        resource
-      );
+    async function trigger() {
+      const data = store.resources.find((r) => r.name === resource);
+      if (data) {
+        const response = await application.request(
+          ResourcesEvents.DELETE,
+          resource
+        );
 
-      // Handling the response
-      if (response && response[0]) {
-        message.open({
-          type: "success",
-          content: t("MESSAGES.RESOURCE_DELETED", { resource }),
-        });
-      } else {
-        message.open({
-          type: "error",
-          content: t("MESSAGES.UNEXPECTED_ERROR", {
-            error: i18n.exists(`ERRORS.${response[1]}`)
-              ? t(`ERRORS.${response[1]}`)
-              : `(${response[1]})`,
-          }),
-        });
+        // Handling the response
+        if (response && response[0]) {
+          message.open({
+            type: "success",
+            content: t("MESSAGES.RESOURCE_DELETED", { resource }),
+          });
+        } else {
+          message.open({
+            type: "error",
+            content: t("MESSAGES.UNEXPECTED_ERROR", {
+              error: i18n.exists(`ERRORS.${response[1]}`)
+                ? t(`ERRORS.${response[1]}`)
+                : `(${response[1]})`,
+            }),
+          });
+        }
       }
     }
+
+    // Openning the modal
+    modal.confirm({
+      title: t("DIALOGS.RESOURCE_DELETE_HEADER"),
+      content: t("DIALOGS.RESOURCE_DELETE_BODY", { resource }),
+      okText: t("ACTIONS.DELETE"),
+      onOk: trigger,
+    });
   };
 
   useEffect(() => {
@@ -144,24 +154,24 @@ const Resources: FC & IResourcesExtraActions = () => {
         sticky
         columns={[
           {
-            title: "Name",
+            title: t("FIELDS.COMMON.NAME"),
             dataIndex: "name",
             width: "20%",
           },
           {
-            title: "Path",
+            title: t("FIELDS.COMMON.PATH"),
             dataIndex: "path",
             width: "30%",
           },
           {
             align: "center",
-            title: "Action",
+            title: t("FIELDS.COMMON.ACTION"),
             dataIndex: "action",
             width: "8%",
           },
           {
             align: "center",
-            title: "Active",
+            title: t("FIELDS.COMMON.ACTIVE"),
             dataIndex: "active",
             width: "8%",
           },
