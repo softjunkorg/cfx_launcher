@@ -7,7 +7,7 @@ export const themeData = atom<ThemeConfig>({
   default: {
     token: {
       colorPrimary: "#4a79ff",
-      borderRadius: 0,
+      borderRadius: 2,
       fontFamily: "Unbounded",
     },
     algorithm: theme.darkAlgorithm,
