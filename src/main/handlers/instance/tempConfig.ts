@@ -31,11 +31,11 @@ class TempConfig {
   private async startReplicated() {
     // Loading the server icon
     if (!this.replicated.load_server_icon) {
-      this.replicated.load_server_icon = `.launcher_cache/${await ServerImage.create(
+      this.replicated.load_server_icon = await ServerImage.create(
         this.fields.load_server_icon,
         this.cache,
         [96, 96]
-      )}`;
+      );
     }
 
     return true;

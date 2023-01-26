@@ -34,25 +34,16 @@ class ServerImage {
         await fsp.rm(file);
       }
 
-      // Adding to the cache
-      this.sources[`${fileID}__IMAGE.png`] = `${fileID}__IMAGE.png`;
-
-      return `${fileID}__IMAGE.png`;
+      return path.resolve(folder, `${fileID}__IMAGE.png`);
     }
 
     return "";
   }
 
-  public async delete(fileID: string) {
-    if (this.sources[fileID]) {
-      // Removing the file
-      await fsp.rm(this.sources[fileID]);
-      delete this.sources[fileID];
-
-      return true;
-    }
-
-    return false;
+  public async delete(file: string) {
+    // Removing the file
+    await fsp.rm(file);
+    return true;
   }
 }
 
