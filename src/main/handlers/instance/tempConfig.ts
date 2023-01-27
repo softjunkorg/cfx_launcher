@@ -148,6 +148,18 @@ class TempConfig {
     return false;
   }
 
+  public async updateFields(fields: object) {
+    this.fields = fields;
+
+    // Checking if it is created
+    if (this.isCreated) {
+      await fs.writeFile(this.file, this.mapFields());
+      return this.file;
+    }
+
+    return false;
+  }
+
   public async delete() {
     if (this.isCreated && this.file) {
       await this.deleteReplicated();

@@ -37,6 +37,18 @@ class TempConfig {
     return false;
   }
 
+  public async updateFields(fields: string[]) {
+    this.fields = fields;
+
+    // Checking if it is created
+    if (this.isCreated) {
+      await fs.writeFile(this.file, this.mapFields());
+      return this.file;
+    }
+
+    return false;
+  }
+
   public async delete() {
     if (this.isCreated && this.file) {
       await fs.rm(this.file);

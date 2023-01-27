@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { exec, spawn } from "child_process";
 import { app } from "electron";
 import fs from "fs";
 import path from "path";
@@ -10,7 +10,7 @@ import {
   TInstanceProcess,
 } from "../../../types";
 import { TempConfig, TempResources } from "../../handlers/instance";
-import { ansi, store, wait, window, cache } from "../../utils";
+import { ansi, store, wait, window, cache, events } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -39,6 +39,7 @@ async function stopInstance() {
   // Notifiying the front
   await wait(500);
   window.request(InstanceEvents.STOPPED);
+  events.emit(InstanceEvents.STOPPED);
   instanceStatus = InstanceStatus.STOPPED;
 
   return [true, null];
@@ -120,6 +121,11 @@ async function startInstance() {
       ) {
         renderWindow.setProgressBar(0);
         window.request(InstanceEvents.RUNNING);
+        events.emit(
+          InstanceEvents.RUNNING,
+          instanceTempConfig,
+          instanceTempResources
+        );
         instanceStatus = InstanceStatus.RUNNING;
       }
 
@@ -153,6 +159,11 @@ async function startInstance() {
   // Creating window loader
   renderWindow.setProgressBar(2);
   window.request(InstanceEvents.STARTING);
+  events.emit(
+    InstanceEvents.STARTING,
+    instanceTempConfig,
+    instanceTempResources
+  );
   instanceStatus = InstanceStatus.STARTING;
 
   return [true, null];
@@ -181,7 +192,7 @@ window.listen(InstanceEvents.RESTART, restartInstance);
 
 // Execute command on the instance
 async function executeInstanceCommand(
-  event: Electron.IpcMainInvokeEvent,
+  event: Electron.IpcMainInvokeEvent | null,
   command: string
 ) {
   if (
@@ -194,9 +205,12 @@ async function executeInstanceCommand(
 
   // Executing the commnad
   instanceProcess.stdin.write(`${command}\n`);
-  // window.request("INSTANCE_COMMAND_EXECUTED", command);
+  events.emit(InstanceEvents.COMMAND_EXECUTED, command);
 
   return [true, null];
 }
 
 window.listen(InstanceEvents.EXECUTE_COMMAND, executeInstanceCommand);
+events.on(InstanceEvents.EXECUTE_COMMAND, (command: string) => {
+  executeInstanceCommand(null, command);
+});

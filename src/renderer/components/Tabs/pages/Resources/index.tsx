@@ -36,8 +36,12 @@ const Resources: FC & IResourcesExtraActions = () => {
   // Handling resources addition
   const handleAddResources = (resources: IResource[]) => {
     if (resources && store.resources) {
+      let discovered = 0;
+
+      // Mapping the received resources
       const replicated = resources.map((row) => {
         const match = store.resources.find((r) => r.name === row.name) || null;
+        if (!match) discovered += 1;
         return {
           name: row.name,
           path: store.settings.resourcesFolder
@@ -46,6 +50,11 @@ const Resources: FC & IResourcesExtraActions = () => {
           active: match ? match?.active : true,
         };
       });
+
+      // Warning new resources
+      if (discovered > 0) {
+        message.success(t("MESSAGES.NEW_RESOURCES", { count: discovered }));
+      }
 
       // Setting the store
       changeStore({
@@ -56,6 +65,7 @@ const Resources: FC & IResourcesExtraActions = () => {
 
   // Handling fetch resources
   const handleFetch = async (report?: boolean) => {
+    setLoading(true);
     const response = await application.request(ResourcesEvents.FETCH);
 
     // Handling the response

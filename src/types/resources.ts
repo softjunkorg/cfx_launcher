@@ -2,6 +2,7 @@ export enum ResourcesEvents {
   FETCH = "RESOURCES::FETCH",
   DELETE = "RESORUCES::DELETE",
   REFRESH = "RESORUCES::REFRESH",
+  LOCAL_UPDATE = "RESOURCES::LOCAL_UPDATE",
 }
 
 export enum ResourcesErrors {

@@ -1,9 +1,18 @@
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import { IResource, ResourcesErrors, ResourcesEvents } from "../../../types";
+import chokidar, { FSWatcher } from "chokidar";
+import {
+  InstanceEvents,
+  IResource,
+  ResourcesErrors,
+  ResourcesEvents,
+} from "../../../types";
 import { InstanceResources } from "../../handlers/resources";
-import { store, window } from "../../utils";
+import { TempResources } from "../../handlers/instance";
+import { events, store, wait, window } from "../../utils";
+
+let watcherProcess: FSWatcher | null = null;
 
 // Listen to resources fetch request
 async function fetchResources() {
@@ -52,3 +61,70 @@ async function deleteResource(_: any, name: string) {
 }
 
 window.listen(ResourcesEvents.DELETE, deleteResource);
+
+// Listening to resourcesFolder changes once server is started
+async function startWatching(_: any, tempResources: TempResources) {
+  const folder = store.get("settings.resourcesFolder") as string;
+
+  // Checking runtime
+  if (!folder || !fs.existsSync(folder))
+    return [false, ResourcesErrors.FOLDER_ERROR];
+
+  // Creating the process
+  watcherProcess = chokidar.watch(folder, {
+    ignored: /(^|[/\\])node_modules$/,
+    persistent: true,
+  });
+
+  // On watcher process add directory
+  watcherProcess.on("addDir", async (resource: string) => {
+    const resources = store.get("resources") as IResource[];
+    const content = await fsp.readdir(resource);
+    const name = resource.split("\\")[resource.split("\\").length - 1];
+
+    // Checking if it is really a resource
+    if (
+      content.includes("fxmanifest.lua") &&
+      !resources.find((r) => r.name === name)
+    ) {
+      const updatedResources = [
+        ...resources,
+        {
+          name,
+          path: resource.replace(`${folder}\\`, ""),
+          active: true,
+        },
+      ];
+
+      // Updating the store
+      store.set("resources", updatedResources);
+
+      // Updating resource manifest
+      tempResources.updateFields(
+        updatedResources
+          .filter((r) => r.active === true)
+          .map((r) => `ensure ${r.name}`)
+      );
+
+      // Refreshing the terminal and ensuring the resource
+      events.emit(InstanceEvents.EXECUTE_COMMAND, "refresh");
+      events.emit(InstanceEvents.EXECUTE_COMMAND, `ensure ${name}`);
+
+      // Sending message to front
+      window.request(ResourcesEvents.LOCAL_UPDATE, name);
+    }
+  });
+
+  return true;
+}
+
+events.on(InstanceEvents.RUNNING, startWatching);
+
+// Listening to cancel file watcher
+function stopWatching() {
+  // Stopping the process
+  watcherProcess?.close();
+  watcherProcess = null;
+}
+
+events.on(InstanceEvents.STOPPED, stopWatching);

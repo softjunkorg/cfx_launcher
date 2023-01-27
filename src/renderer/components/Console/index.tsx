@@ -2,7 +2,7 @@ import { useInstanceStatus } from "renderer/hooks";
 import { application } from "renderer/services";
 import { useInstanceActions } from "renderer/store/actions";
 import { instanceStatus } from "renderer/store/state";
-import { InstanceEvents, InstanceStatus } from "types";
+import { InstanceEvents, InstanceStatus, ResourcesEvents } from "types";
 import Line from "ansi-to-react";
 import { App, Button, Input, InputRef, Result } from "antd";
 import { FC, useEffect, useRef, useState } from "react";
@@ -54,11 +54,19 @@ const Console: FC = () => {
       setMessages([]);
     });
 
+    const localResourcesUpdate = application.listen(
+      ResourcesEvents.LOCAL_UPDATE,
+      (event, resource: string) => {
+        message.info(t("MESSAGES.RESOURCE_ADDED", { resource }));
+      }
+    );
+
     // Cleanup
     return () => {
       application.off(InstanceEvents.RUNNING, runningListener);
       application.off(InstanceEvents.MESSAGE, messageListener);
       application.off(InstanceEvents.STOPPED, stopListener);
+      application.off(ResourcesEvents.LOCAL_UPDATE, localResourcesUpdate);
     };
   }, []);
 
