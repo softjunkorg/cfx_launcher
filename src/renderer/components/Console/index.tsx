@@ -34,6 +34,7 @@ const Console: FC = () => {
 
   // Listen to messages update
   useEffect(() => {
+    // Listening to instance running
     const runningListener = application.listen(InstanceEvents.RUNNING, () => {
       setStatus(InstanceStatus.RUNNING);
       message.open({
@@ -42,6 +43,7 @@ const Console: FC = () => {
       });
     });
 
+    // Listening to message received
     const messageListener = application.listen(
       InstanceEvents.MESSAGE,
       (event, data: string) => {
@@ -49,15 +51,33 @@ const Console: FC = () => {
       }
     );
 
+    // Listening to instance stop
     const stopListener = application.listen(InstanceEvents.STOPPED, () => {
       setSessionCommands({ commands: [], index: null });
       setMessages([]);
     });
 
+    // Listening to local resources update
     const localResourcesUpdate = application.listen(
       ResourcesEvents.LOCAL_UPDATE,
       (event, resource: string) => {
         message.info(t("MESSAGES.RESOURCE_ADDED", { resource }));
+      }
+    );
+
+    // Listening to local resources unlink
+    const localResourcesUnlink = application.listen(
+      ResourcesEvents.LOCAL_UNLINK,
+      (event, resource: string) => {
+        message.info(t("MESSAGES.RESOURCE_DELETED", { resource }));
+      }
+    );
+
+    // Listening to local resources deleted
+    const localResourcesDeleted = application.listen(
+      ResourcesEvents.DELETED,
+      (event, count: number) => {
+        message.info(t("MESSAGES.RETIRED_RESOURCES", { count }));
       }
     );
 
@@ -67,6 +87,8 @@ const Console: FC = () => {
       application.off(InstanceEvents.MESSAGE, messageListener);
       application.off(InstanceEvents.STOPPED, stopListener);
       application.off(ResourcesEvents.LOCAL_UPDATE, localResourcesUpdate);
+      application.off(ResourcesEvents.LOCAL_UNLINK, localResourcesUnlink);
+      application.off(ResourcesEvents.DELETED, localResourcesDeleted);
     };
   }, []);
 

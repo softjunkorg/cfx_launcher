@@ -73,7 +73,6 @@ async function startWatching(_: any, tempResources: TempResources) {
   // Creating the process
   watcherProcess = chokidar.watch(folder, {
     ignored: /(^|[/\\])node_modules$/,
-    persistent: true,
   });
 
   // On watcher process add directory
@@ -85,7 +84,9 @@ async function startWatching(_: any, tempResources: TempResources) {
     // Checking if it is really a resource
     if (
       content.includes("fxmanifest.lua") &&
-      !resources.find((r) => r.name === name)
+      !resources.find(
+        (r) => r.name === name && r.path === resource.replace(`${folder}\\`, "")
+      )
     ) {
       const updatedResources = [
         ...resources,
@@ -112,6 +113,40 @@ async function startWatching(_: any, tempResources: TempResources) {
 
       // Sending message to front
       window.request(ResourcesEvents.LOCAL_UPDATE, name);
+    }
+  });
+
+  // On watcher process unlink directory
+  watcherProcess.on("unlinkDir", async (resource: string) => {
+    const resources = store.get("resources") as IResource[];
+    const name = resource.split("\\")[resource.split("\\").length - 1];
+
+    // Checking if it is really a resource
+    if (
+      resources.find(
+        (r) => r.name === name && r.path === resource.replace(`${folder}\\`, "")
+      )
+    ) {
+      const updatedResources = resources.filter(
+        (r) => r.name !== name && r.path !== resource.replace(`${folder}\\`, "")
+      );
+
+      // Updating the store
+      store.set("resources", updatedResources);
+
+      // Updating resource manifest
+      tempResources.updateFields(
+        updatedResources
+          .filter((r) => r.active === true)
+          .map((r) => `ensure ${r.name}`)
+      );
+
+      // Refreshing the terminal and ensuring the resource
+      events.emit(InstanceEvents.EXECUTE_COMMAND, `stop ${name}`);
+      events.emit(InstanceEvents.EXECUTE_COMMAND, "refresh");
+
+      // Sending message to front
+      window.request(ResourcesEvents.LOCAL_UNLINK, name);
     }
   });
 

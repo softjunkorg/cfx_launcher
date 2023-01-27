@@ -9,7 +9,11 @@ import {
   IResource,
   TInstanceProcess,
 } from "../../../types";
-import { TempConfig, TempResources } from "../../handlers/instance";
+import {
+  checkResources,
+  TempConfig,
+  TempResources,
+} from "../../handlers/instance";
 import { ansi, store, wait, window, cache, events } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
@@ -52,7 +56,6 @@ app.on("before-quit", stopInstance);
 async function startInstance() {
   const artifactsFolder = store.get("settings.artifactsFolder") as string;
   const resourcesFolder = store.get("settings.resourcesFolder") as string;
-  const resources = store.get("resources") as IResource[];
   const instanceConfig = store.get("instanceConfig");
 
   // Checking for directory
@@ -60,6 +63,9 @@ async function startInstance() {
     return [false, InstanceErrors.ARTIFACTS_FOLDER_ERROR];
   if (!resourcesFolder || !fs.existsSync(resourcesFolder))
     return [false, InstanceErrors.RESOURCES_FOLDER_ERROR];
+
+  // Checking the resources
+  const resources = checkResources() as IResource[];
 
   // Creating temporaty config and resources
   instanceTempConfig = new TempConfig(

@@ -5,8 +5,6 @@ import fsp from "fs/promises";
 import path from "path";
 
 class ServerImage {
-  private sources: { [x: string]: string } = {};
-
   private cleanBase64(url: string): string {
     return url.replace(/^data:([A-Za-z-+/]+);base64,/, "");
   }

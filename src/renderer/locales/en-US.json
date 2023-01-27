@@ -78,7 +78,8 @@
   },
   "MESSAGES": {
     "RESOURCE_DELETED": "Resource {{resource}} was deleted.",
-    "NEW_RESOURCES": "Added {{count}} new resources to the list.",
+    "NEW_RESOURCES": "Added {{count}} new resource(s) to the list.",
+    "RETIRED_RESOURCES": "Removed {{count}} deleted resource(s) to the list.",
     "RESOURCE_ADDED": "Added {{resource}} resource to the list.",
     "SERVER_ERROR": "The server threw an exception. Code: {{code}}",
     "SERVER_EXECUTE_COMMAND_ERROR": "An error happened on the command execution.",
