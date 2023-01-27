@@ -29,7 +29,7 @@ window.listen(WindowEvents.CLOSE, () => {
 });
 
 // Listening to window resize
-renderWindow.on("resize", () => {
+renderWindow.on("close", () => {
   const { width, height } = renderWindow.getBounds();
   store.set("app.windowSize", { width, height });
 });

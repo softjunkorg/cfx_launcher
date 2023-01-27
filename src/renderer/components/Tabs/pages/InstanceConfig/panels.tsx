@@ -1,29 +1,48 @@
 /* eslint-disable no-nested-ternary */
-import { ReactNode, FC, useEffect } from "react";
 import {
-  Collapse,
-  Col,
-  Row,
-  Input,
-  Select,
-  InputNumber,
-  Upload,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
+import {
   App,
+  Button,
+  Col,
+  Collapse,
+  Empty,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tooltip,
+  Typography,
+  Upload,
 } from "antd";
-import { useTranslation } from "react-i18next";
-import { TFunction } from "i18next";
-import Field from "renderer/components/Field";
-import CountrySelect from "renderer/components/CountrySelect";
-import merge from "deepmerge";
-import baseConfig from "config";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { useLoadingFields } from "renderer/hooks";
+import { ColumnType } from "antd/es/table";
 import {
   RcFile,
   UploadChangeParam,
   UploadFile,
 } from "antd/es/upload/interface";
-import { Panel, FullSpace, UploadContainer, UploadImage } from "./styles";
+import baseConfig from "config";
+import merge from "deepmerge";
+import { TFunction } from "i18next";
+import { FC, Key, ReactNode, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import CountrySelect from "renderer/components/CountrySelect";
+import EditableCell from "renderer/components/EditableCell";
+import Field from "renderer/components/Field";
+import { useLoadingFields } from "renderer/hooks";
+import { ICustomField } from "types";
+import { FullSpace, Panel, UploadContainer, UploadImage } from "./styles";
 
 type PanelConfigReplicated = { [x: string]: any };
 
@@ -52,7 +71,7 @@ const PanelConfig: FC<IPanelConfigProps> = (props) => {
   const { t } = useTranslation();
 
   // Handling the replication
-  const handleReplicate = (value: PanelConfigReplicated) => {
+  const handleReplicate = (value: Partial<PanelConfigReplicated>) => {
     if (value && replicated) {
       return onReplicated(
         merge(replicated, value, {
@@ -671,6 +690,274 @@ const defaultConfiguration: IPanelConfig[] = [
         },
       },
     ],
+  },
+  {
+    key: "custom_fields",
+    name: "PANELS.CUSTOM_FIELDS.NAME",
+    useChildren: (t, replicated, setReplicated) => {
+      const { modal } = App.useApp();
+      const [form] = Form.useForm();
+      const [name, setName] = useState<string>("");
+      const [open, setOpen] = useState<boolean>(false);
+      const [editingField, setEditingField] = useState("");
+
+      interface Item {
+        name: string;
+        value: string;
+      }
+
+      // Handling field creation
+      const handleCreate = () => {
+        if (
+          name.length > 0 &&
+          !replicated?.custom_fields?.find((f: ICustomField) => f.name === name)
+        ) {
+          setReplicated({
+            custom_fields: [
+              ...(replicated.custom_fields || []),
+              {
+                name,
+                value: null,
+              },
+            ],
+          });
+          setOpen(false);
+          setName("");
+        }
+      };
+
+      // Handling field deletion
+      const handleDelete = (field: string) => {
+        // Waiting for trigger
+        const trigger = () => {
+          const data = replicated?.custom_fields?.find(
+            (f: ICustomField) => f.name === field
+          );
+          if (data) {
+            const fields = [...replicated.custom_fields];
+            const index = fields.findIndex((f) => field === f.name);
+
+            // Splicing it out
+            fields.splice(index, 1);
+            setReplicated({ custom_fields: fields });
+          }
+        };
+
+        // Oppening the modal
+        modal.confirm({
+          title: t("DIALOGS.DELETE_CUSTOM_FIELD_HEADER"),
+          content: t("DIALOGS.DELETE_CUSTOM_FIELD_BODY", { field }),
+          okText: t("ACTIONS.DELETE"),
+          onOk: trigger,
+        });
+      };
+
+      // Handling field edit
+      const handleEdit = (record: Partial<Item>) => {
+        form.setFieldsValue({ name: "", value: "", ...record });
+        if (record.name) setEditingField(record.name);
+      };
+
+      // Handling field save
+      const handleSaveEdit = async (field: string) => {
+        const row = (await form.validateFields()) as any;
+
+        // Replicating the new Data
+        const fields = [...(replicated?.custom_fields || [])];
+        const index = fields.findIndex((f) => field === f.name);
+
+        // Checking indexes
+        if (index > -1) {
+          const item = fields[index];
+
+          // Splicing the new data
+          fields.splice(index, 1, {
+            ...item,
+            ...row,
+          });
+
+          // Chaning data
+          setReplicated({ custom_fields: fields });
+          setEditingField("");
+        }
+      };
+
+      return (
+        <>
+          {/* Modal */}
+          <Modal
+            title={t("DIALOGS.CREATE_CUSTOM_FIELD_HEADER")}
+            open={open}
+            onOk={handleCreate}
+            okText={t("ACTIONS.SAVE")}
+            onCancel={() => {
+              setOpen(false);
+              setName("");
+            }}
+            okButtonProps={{
+              disabled:
+                name.length === 0 ||
+                replicated?.custom_fields?.find(
+                  (f: ICustomField) => f.name === name
+                ),
+            }}
+          >
+            <Space
+              direction="vertical"
+              style={{ width: "100%", display: "flex" }}
+            >
+              <span>{t("DIALOGS.CREATE_CUSTOM_FIELD_BODY")}</span>
+              <Input
+                value={name}
+                onInput={(e) => setName(e.currentTarget.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
+              />
+            </Space>
+          </Modal>
+          {/* Fields */}
+          <Space
+            direction="vertical"
+            size="middle"
+            style={{ width: "100%", display: "flex" }}
+          >
+            <Form form={form} component={false}>
+              {/* Fields */}
+              <Table
+                columns={
+                  [
+                    ...[
+                      {
+                        title: t("FIELDS.COMMON.NAME"),
+                        dataIndex: "name",
+                        width: "35%",
+                        required: true,
+                        editable: true,
+                      },
+                      {
+                        title: t("FIELDS.COMMON.VALUE"),
+                        dataIndex: "value",
+                        width: "65%",
+                        required: false,
+                        editable: true,
+                      },
+                      {
+                        align: "center",
+                        title: t("FIELDS.COMMON.ACTION"),
+                        dataIndex: "action",
+                        render: (_: any, record: Item) => {
+                          const editable = record.name === editingField;
+                          return editable ? (
+                            <Space style={{ display: "flex" }}>
+                              <Tooltip title={t("ACTIONS.SAVE")}>
+                                <Button
+                                  onClick={() => handleSaveEdit(record.name)}
+                                  icon={<SaveOutlined />}
+                                />
+                              </Tooltip>
+                              <Tooltip title={t("ACTIONS.CANCEL")}>
+                                <Popconfirm
+                                  title={t("DIALOGS.WANT_TO", {
+                                    action: t("ACTIONS.CANCEL"),
+                                  })}
+                                  onConfirm={() => setEditingField("")}
+                                >
+                                  <Button icon={<CloseOutlined />} />
+                                </Popconfirm>
+                              </Tooltip>
+                            </Space>
+                          ) : (
+                            <Space style={{ display: "flex" }}>
+                              <Tooltip title={t("ACTIONS.EDIT")}>
+                                <Button
+                                  type="primary"
+                                  disabled={editingField !== ""}
+                                  onClick={() => handleEdit(record)}
+                                  icon={<EditOutlined />}
+                                />
+                              </Tooltip>
+                              <Tooltip title={t("ACTIONS.DELETE")}>
+                                <Button
+                                  disabled={editingField !== ""}
+                                  onClick={() => handleDelete(record.name)}
+                                  icon={<DeleteOutlined />}
+                                />
+                              </Tooltip>
+                            </Space>
+                          );
+                        },
+                        width: "50%",
+                      },
+                    ].map((col) => {
+                      // Checking editable state
+                      if (!col.editable) {
+                        return col;
+                      }
+
+                      return {
+                        ...col,
+                        onCell: (record: Item) => ({
+                          record,
+                          inputType:
+                            col.dataIndex === "age" ? "number" : "text",
+                          dataIndex: col.dataIndex,
+                          title: col.title,
+                          editing: record.name === editingField,
+                          required: col.required,
+                          customRules: [
+                            () => ({
+                              // Checking same names on edit
+                              validator(_: any, value: string) {
+                                if (col.dataIndex === "name") {
+                                  if (
+                                    replicated?.custom_fields.find(
+                                      (f: ICustomField) =>
+                                        f.name === value &&
+                                        f.name !== editingField
+                                    )
+                                  ) {
+                                    return Promise.reject(
+                                      new Error("Duplicate field names!")
+                                    );
+                                  }
+                                }
+
+                                return Promise.resolve();
+                              },
+                            }),
+                          ],
+                        }),
+                      };
+                    }),
+                  ] as unknown as ColumnType<any>[]
+                }
+                components={{
+                  body: {
+                    cell: EditableCell,
+                  },
+                }}
+                dataSource={
+                  (replicated?.custom_fields &&
+                    replicated?.custom_fields.map((field: ICustomField) => ({
+                      key: field.name,
+                      align: "center",
+                      name: field.name,
+                      value: field.value,
+                    }))) ||
+                  []
+                }
+                pagination={false}
+                bordered
+              />
+            </Form>
+            {/* New field */}
+            <Button onClick={() => setOpen(true)} icon={<PlusOutlined />}>
+              {t("ACTIONS.NEW_FIELD")}
+            </Button>
+          </Space>
+        </>
+      );
+    },
   },
 ];
 

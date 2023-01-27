@@ -1,11 +1,16 @@
 import styled from "styled-components";
 
-export const Main = styled.div`
+interface IMainProps {
+  direction?: "row" | "column";
+}
+
+export const Main = styled.div<IMainProps>`
   width: 100%;
   height: fit-content;
-  gap: 3px;
+  gap: ${(props) => (props.direction === "row" ? props.theme.padding : 3)}px;
   display: flex;
-  flex-direction: column;
+  flex-direction: ${(props) => props.direction};
+  align-items: ${(props) => (props.direction === "row" ? "center" : "")};
 `;
 
 export const Label = styled.span`

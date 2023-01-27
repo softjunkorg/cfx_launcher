@@ -2,8 +2,8 @@ import { application, events } from "renderer/services";
 import { useStoreActions } from "renderer/store/actions";
 import { DeleteOutlined } from "@ant-design/icons";
 import { IResource, ResourcesErrors, ResourcesEvents } from "types";
-import { App, Breadcrumb, Button, Switch, Table, Tooltip } from "antd";
-import { FC, useEffect } from "react";
+import { App, Breadcrumb, Button, Spin, Switch, Table, Tooltip } from "antd";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
 import { Main } from "../sharedStyles";
@@ -31,6 +31,7 @@ const Resources: FC & IResourcesExtraActions = () => {
   const { t } = useTranslation();
   const { store, changeStore } = useStoreActions();
   const { message, modal } = App.useApp();
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Handling resources addition
   const handleAddResources = (resources: IResource[]) => {
@@ -81,6 +82,7 @@ const Resources: FC & IResourcesExtraActions = () => {
       }
     }
 
+    setLoading(false);
     return true;
   };
 
@@ -149,68 +151,74 @@ const Resources: FC & IResourcesExtraActions = () => {
   }, [store.settings.resourcesFolder]);
 
   return (
-    <Main>
-      <Table
-        sticky
-        columns={[
-          {
-            title: t("FIELDS.COMMON.NAME"),
-            dataIndex: "name",
-            width: "20%",
-          },
-          {
-            title: t("FIELDS.COMMON.PATH"),
-            dataIndex: "path",
-            width: "30%",
-          },
-          {
-            align: "center",
-            title: t("FIELDS.COMMON.ACTION"),
-            dataIndex: "action",
-            width: "8%",
-          },
-          {
-            align: "center",
-            title: t("FIELDS.COMMON.ACTIVE"),
-            dataIndex: "active",
-            width: "8%",
-          },
-        ]}
-        dataSource={
-          store.resources &&
-          [...store.resources]
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((row, i) => ({
-              key: i,
+    <Spin size="large" spinning={loading}>
+      <Main>
+        <Table
+          sticky
+          columns={[
+            {
+              title: t("FIELDS.COMMON.NAME"),
+              dataIndex: "name",
+              width: "20%",
+            },
+            {
+              title: t("FIELDS.COMMON.PATH"),
+              dataIndex: "path",
+              width: "30%",
+            },
+            {
               align: "center",
-              name: row.name,
-              path: (
-                <Breadcrumb>
-                  {row.path.split("\\").map((r) => (
-                    <Breadcrumb.Item key={Math.random()}>{r}</Breadcrumb.Item>
-                  ))}
-                </Breadcrumb>
-              ),
-              action: (
-                <Tooltip placement="top" title={t("ACTIONS.DELETE")}>
-                  <Button
-                    onClick={() => handleDelete(row.name)}
-                    icon={<DeleteOutlined />}
-                  />
-                </Tooltip>
-              ),
-              active: (
-                <Switch
-                  onChange={(e) => handleActive(row.name, e)}
-                  checked={row.active}
-                />
-              ),
-            }))
-        }
-        pagination={false}
-        scroll={{ y: "100%" }}
-      />
-    </Main>
+              title: t("FIELDS.COMMON.ACTION"),
+              dataIndex: "action",
+              width: "8%",
+            },
+            {
+              align: "center",
+              title: t("FIELDS.COMMON.ACTIVE"),
+              dataIndex: "active",
+              width: "8%",
+            },
+          ]}
+          dataSource={
+            (!loading &&
+              store.resources &&
+              [...store.resources]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((row, i) => ({
+                  key: i,
+                  align: "center",
+                  name: row.name,
+                  path: (
+                    <Breadcrumb>
+                      {row.path.split("\\").map((r) => (
+                        <Breadcrumb.Item key={Math.random()}>
+                          {r}
+                        </Breadcrumb.Item>
+                      ))}
+                    </Breadcrumb>
+                  ),
+                  action: (
+                    <Tooltip placement="top" title={t("ACTIONS.DELETE")}>
+                      <Button
+                        onClick={() => handleDelete(row.name)}
+                        icon={<DeleteOutlined />}
+                      />
+                    </Tooltip>
+                  ),
+                  active: (
+                    <Switch
+                      onChange={(e) => handleActive(row.name, e)}
+                      checked={row.active}
+                    />
+                  ),
+                }))) ||
+            []
+          }
+          pagination={false}
+          scroll={{ y: "100%" }}
+        />
+      </Main>
+    </Spin>
   );
 };
 

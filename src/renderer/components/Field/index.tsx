@@ -12,6 +12,7 @@ const Multiple: FC<IMultipleProps> = (props) => {
 
 interface IFieldProps {
   component: ReactNode;
+  direction?: "row" | "column";
   label: string;
 }
 
@@ -20,9 +21,9 @@ interface IFieldSubComponents {
 }
 
 const Field: FC<IFieldProps> & IFieldSubComponents = (props) => {
-  const { component, label }: IFieldProps = props;
+  const { component, label, direction = "column" }: IFieldProps = props;
   return (
-    <Main>
+    <Main direction={direction}>
       <Label>{label}</Label>
       {component}
     </Main>

@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import config from "../../../config";
 import ServerImage from "./serverImage";
+import { ICustomField } from "../../../types";
 
 class TempConfig {
   private replicated = {
@@ -38,6 +39,17 @@ class TempConfig {
       );
     }
 
+    // Loading custom fields
+    if (this.fields.custom_fields) {
+      this.fields.custom_fields.map((field: ICustomField) => {
+        this.fields[field.name] = `@custom.field(${field.value})`;
+        return true;
+      });
+
+      // Removing custom fields
+      delete this.fields.custom_fields;
+    }
+
     return true;
   }
 
@@ -57,7 +69,18 @@ class TempConfig {
     const file = Object.entries(this.fields).map((row) => {
       const key = row[0];
       let value = row[1] as string | string[] | boolean | number;
+      let isCustomField = false;
 
+      // Checking for custom fields
+      if (
+        typeof value === "string" &&
+        (value as string).includes("@custom.field")
+      ) {
+        value = (value as string).replace(/@custom\.field\((.*?)\)/, "$1");
+        isCustomField = true;
+      }
+
+      // Checking for field runtime
       if (key && value !== null && value !== false && value !== "false") {
         let prefix = "";
 
@@ -78,6 +101,7 @@ class TempConfig {
 
           // eslint-disable-next-line no-fallthrough
           default:
+            if (isCustomField) prefix = "sets ";
             break;
         }
 

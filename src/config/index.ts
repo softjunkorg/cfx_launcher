@@ -1,4 +1,4 @@
-import { IResource } from "../types";
+import { ICustomField, IResource } from "../types";
 
 const config = {
   game: {
@@ -40,6 +40,7 @@ const config = {
         load_server_icon: null,
         banner_detail: null,
         banner_connecting: null,
+        custom_fields: [] as ICustomField[],
       },
       resources: [] as IResource[],
       settings: {
@@ -51,8 +52,8 @@ const config = {
       },
       app: {
         windowSize: {
-          width: 1100,
-          height: 600,
+          width: 900,
+          height: 500,
         },
       },
     },

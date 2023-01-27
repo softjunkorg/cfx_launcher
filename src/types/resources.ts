@@ -14,3 +14,8 @@ export interface IResource {
   path: string;
   active: boolean;
 }
+
+export interface ICustomField {
+  name: string;
+  value: string;
+}

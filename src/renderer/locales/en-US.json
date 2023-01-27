@@ -1,53 +1,43 @@
 {
-  "TABS": {
-    "TERMINAL": "Terminal",
-    "RESOURCES": "Resources",
-    "INSTANCE_CONFIG": "Instance Config",
-    "SETTINGS": "Settings"
-  },
-  "HEADER": {
-    "TITLE": "Launcher"
-  },
   "ACTIONS": {
+    "BROWSE": "Browse",
     "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "REFRESH": "Refresh",
+    "RESTART": "Restart",
+    "SAVE": "Save",
+    "SEND": "Send",
     "START": "Start",
     "STOP": "Stop",
-    "RESTART": "Restart",
-    "REFRESH": "Refresh",
-    "SEND": "Send",
-    "BROWSE": "Browse",
-    "SAVE": "Save",
-    "DELETE": "Delete",
-    "UPLOAD": "Upload"
+    "UPLOAD": "Upload",
+    "NEW_FIELD": "New Field",
+    "EDIT": "Edit"
   },
-  "STATUS": {
-    "WORD": "Status",
-    "STARTING": "Starting",
-    "STOPPED": "Stopped",
-    "STARTED": "Started"
+  "BOOLEAN": {
+    "FALSE": "False",
+    "TRUE": "True"
   },
-  "MESSAGES": {
-    "SERVER_ERROR": "The server threw an exception. Code: {{code}}",
-    "SERVER_STARTED": "Server started.",
-    "SERVER_START_SUCCESS": "Starting the server...",
-    "SERVER_START_ERROR": "An error happened on the start process.",
-    "SERVER_STOPPED": "The server is currently stopped.",
-    "SERVER_STOP_SUCCESS": "Stopping the server...",
-    "SERVER_STOP_ERROR": "An error happened on the stop process.",
-    "SERVER_RESTART_SUCCESS": "Restarting the server...",
-    "SERVER_RESTART_ERROR": "An error happened on the restart process.",
-    "SERVER_REFRESH_SUCCESS": "Refreshing the server...",
-    "SERVER_REFRESH_ERROR": "An error happened on the refresh process.",
-    "SERVER_EXECUTE_COMMAND_SUCCESS": "The command was successfully executed.",
-    "SERVER_EXECUTE_COMMAND_ERROR": "An error happened on the command execution.",
-    "UNEXPECTED_ERROR": "Unexpected error happened. {{error}}",
-    "RESOURCE_DELETED": "Resource {{resource}} was deleted."
+  "BUILDS": {
+    "LATEST": "Latest"
+  },
+  "DIALOGS": {
+    "RESOURCE_DELETE_BODY": "Do you really want to delete the resource {{resource}}?",
+    "RESOURCE_DELETE_HEADER": "Delete Action",
+    "SERVER_RESTART_BODY": "Do you really want to restart the server?",
+    "SERVER_RESTART_HEADER": "Restart Action",
+    "SERVER_STOP_BODY": "Do you really want to stop the server?",
+    "SERVER_STOP_HEADER": "Stop Action",
+    "CREATE_CUSTOM_FIELD_HEADER": "Custom field",
+    "CREATE_CUSTOM_FIELD_BODY": "Write the custom field name:",
+    "DELETE_CUSTOM_FIELD_HEADER": "Custom field",
+    "DELETE_CUSTOM_FIELD_BODY": "Do you really want to delete the field {{field}}?",
+    "WANT_TO": "Do you want to {{action}}?"
   },
   "ERRORS": {
     "INSTANCE": {
       "ARTIFACTS_FOLDER_ERROR": "Artifacts folder doesn't exist or is not set.",
-      "RESOURCES_FOLDER_ERROR": "Resources folder doesn't exist or is not set.",
-      "NOT_RUNNING": "Instance is not running yet."
+      "NOT_RUNNING": "Instance is not running yet.",
+      "RESOURCES_FOLDER_ERROR": "Resources folder doesn't exist or is not set."
     },
     "RESOURCES": {
       "FOLDER_ERROR": "Resources folder doesn't exist or is not set.",
@@ -59,94 +49,115 @@
     }
   },
   "FIELDS": {
-    "SETTINGS": {
-      "ARTIFACTS_FOLDER": "Artifacts Folder",
-      "RESOURCES_FOLDER": "Resources Folder",
-      "INSTANCE_ARGUMENTS": "Instance Arguments",
-      "LANGUAGE": "Language"
-    },
     "COMMON": {
+      "ACTION": "Action",
+      "ACTIVE": "Active",
       "NAME": "Name",
       "PATH": "Path",
-      "ACTION": "Action",
-      "ACTIVE": "Active"
+      "VALUE": "Value"
+    },
+    "SETTINGS": {
+      "ARTIFACTS_FOLDER": "Artifacts Folder",
+      "INSTANCE_ARGUMENTS": "Instance Arguments",
+      "LANGUAGE": "Language",
+      "RESOURCES_FOLDER": "Resources Folder"
     }
   },
-  "PLACEHOLDERS": {
-    "TYPEHERE": "Type in here...",
-    "SELECTHERE": "Select..."
+  "HEADER": {
+    "TITLE": "Launcher"
   },
-  "DIALOGS": {
-    "SERVER_STOP_HEADER": "Stop Action",
-    "SERVER_STOP_BODY": "Do you really want to stop the server?",
-    "SERVER_RESTART_HEADER": "Restart Action",
-    "SERVER_RESTART_BODY": "Do you really want to restart the server?",
-    "RESOURCE_DELETE_HEADER": "Delete Action",
-    "RESOURCE_DELETE_BODY": "Do you really want to delete the resource {{resource}}?"
+  "LANGUAGES": {
+    "en-US": {
+      "LOCAL_NAME": "English, US",
+      "UNIVERSAL_NAME": "English, US"
+    },
+    "pt-BR": {
+      "LOCAL_NAME": "Português do Brasil",
+      "UNIVERSAL_NAME": "Brazilian Portuguese"
+    }
+  },
+  "MESSAGES": {
+    "RESOURCE_DELETED": "Resource {{resource}} was deleted.",
+    "SERVER_ERROR": "The server threw an exception. Code: {{code}}",
+    "SERVER_EXECUTE_COMMAND_ERROR": "An error happened on the command execution.",
+    "SERVER_EXECUTE_COMMAND_SUCCESS": "The command was successfully executed.",
+    "SERVER_REFRESH_ERROR": "An error happened on the refresh process.",
+    "SERVER_REFRESH_SUCCESS": "Refreshing the server...",
+    "SERVER_RESTART_ERROR": "An error happened on the restart process.",
+    "SERVER_RESTART_SUCCESS": "Restarting the server...",
+    "SERVER_START_ERROR": "An error happened on the start process.",
+    "SERVER_START_SUCCESS": "Starting the server...",
+    "SERVER_STARTED": "Server started.",
+    "SERVER_STOP_ERROR": "An error happened on the stop process.",
+    "SERVER_STOP_SUCCESS": "Stopping the server...",
+    "SERVER_STOPPED": "The server is currently stopped.",
+    "UNEXPECTED_ERROR": "Unexpected error happened. {{error}}"
+  },
+  "MODE": {
+    "DISABLED": "Disabled",
+    "OFF": "Off",
+    "ON": "On"
   },
   "PANELS": {
-    "SERVER": "Server",
+    "CUSTOM_FIELDS": {
+      "NAME": "Custom Fields"
+    },
     "PROJECT": {
       "NAME": "Project",
       "TAGS": {
-        "NAME": "Name",
-        "DESCRIPTION": "Description",
-        "LOCALE": "Locale",
-        "TAGS": "Tags",
-        "ICON": "Icon",
         "BANNER_CONNECTING": "Banner Connecting",
-        "BANNER_DETAIL": "Banner Detail"
+        "BANNER_DETAIL": "Banner Detail",
+        "DESCRIPTION": "Description",
+        "ICON": "Icon",
+        "LOCALE": "Locale",
+        "NAME": "Name",
+        "TAGS": "Tags"
+      }
+    },
+    "SERVER": "Server",
+    "SERVER_CONNECTION": {
+      "NAME": "Connection",
+      "TAGS": {
+        "ENDPOINT_PRIVACY": "Endpoint Privacy",
+        "MAX_CLIENTS": "Max Clients",
+        "PURE_LEVEL": "Pure Level",
+        "TCP_ENDPOINT": "TCP Endpoint",
+        "UDP_ENDPOINT": "UDP Endpoint"
       }
     },
     "SERVER_PROPERTIES": {
       "NAME": "Properties",
       "TAGS": {
-        "HOSTNAME": "Hostname",
         "GAMEBUILD": "Game Build",
         "GAMENAME": "Game Name",
-        "PRIVATE": "Private",
+        "HOSTNAME": "Hostname",
         "ONESYNC": "OneSync",
+        "PRIVATE": "Private",
         "SCRIPT_HOOK": "Script Hook"
-      }
-    },
-    "SERVER_CONNECTION": {
-      "NAME": "Connection",
-      "TAGS": {
-        "TCP_ENDPOINT": "TCP Endpoint",
-        "UDP_ENDPOINT": "UDP Endpoint",
-        "MAX_CLIENTS": "Max Clients",
-        "PURE_LEVEL": "Pure Level",
-        "ENDPOINT_PRIVACY": "Endpoint Privacy"
       }
     },
     "SERVER_SECRET": {
       "NAME": "Secret",
       "TAGS": {
-        "STEAM_API_KEY": "Steam API Key",
-        "LICENSE_KEY": "License Key"
+        "LICENSE_KEY": "License Key",
+        "STEAM_API_KEY": "Steam API Key"
       }
     }
   },
-  "BOOLEAN": {
-    "TRUE": "True",
-    "FALSE": "False"
+  "PLACEHOLDERS": {
+    "SELECTHERE": "Select...",
+    "TYPEHERE": "Type in here..."
   },
-  "MODE": {
-    "ON": "On",
-    "OFF": "Off",
-    "DISABLED": "Disabled"
+  "STATUS": {
+    "STARTED": "Started",
+    "STARTING": "Starting",
+    "STOPPED": "Stopped",
+    "WORD": "Status"
   },
-  "BUILDS": {
-    "LATEST": "Latest"
-  },
-  "LANGUAGES": {
-    "pt-BR": {
-      "LOCAL_NAME": "Português do Brasil",
-      "UNIVERSAL_NAME": "Brazilian Portuguese"
-    },
-    "en-US": {
-      "LOCAL_NAME": "English, US",
-      "UNIVERSAL_NAME": "English, US"
-    }
+  "TABS": {
+    "INSTANCE_CONFIG": "Instance Config",
+    "RESOURCES": "Resources",
+    "SETTINGS": "Settings",
+    "TERMINAL": "Terminal"
   }
 }
