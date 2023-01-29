@@ -42,7 +42,9 @@ class TempConfig {
     // Loading custom fields
     if (this.fields.custom_fields) {
       this.fields.custom_fields.map((field: ICustomField) => {
-        this.fields[field.name] = `@custom.field(${field.value})`;
+        this.fields[field.name] = `@custom.field(${field.value}___$${
+          field.isPrivate ? "true" : "false"
+        })`;
         return true;
       });
 
@@ -70,13 +72,23 @@ class TempConfig {
       const key = row[0];
       let value = row[1] as string | string[] | boolean | number;
       let isCustomField = false;
+      let isPrivateField = false;
 
       // Checking for custom fields
       if (
         typeof value === "string" &&
         (value as string).includes("@custom.field")
       ) {
-        value = (value as string).replace(/@custom\.field\((.*?)\)/, "$1");
+        value = (value as string)
+          .replace(/@custom\.field\((.*?)\)/, "$1")
+          .split("___$");
+
+        // Checking field integrity
+        if (value[1] === "true") {
+          isPrivateField = true;
+        }
+
+        [value] = value;
         isCustomField = true;
       }
 
@@ -101,7 +113,9 @@ class TempConfig {
 
           // eslint-disable-next-line no-fallthrough
           default:
-            if (isCustomField) prefix = "sets ";
+            if (isCustomField)
+              if (isPrivateField) prefix = "set ";
+              else prefix = "sets ";
             break;
         }
 

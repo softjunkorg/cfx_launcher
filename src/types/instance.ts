@@ -34,6 +34,7 @@ export interface IInstanceWidget {
 
 export interface IInstanceMessage {
   type: "message" | "widget";
+  isInternational: boolean;
   content: string | IInstanceWidget;
 }
 

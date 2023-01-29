@@ -239,20 +239,28 @@ const Console: FC = () => {
         <Widget style={{ display: maxOpen ? "block" : "none" }}>
           <WidgetIcon type="info">{handleGetWidgetIcon("info")}</WidgetIcon>
           <WidgetContent>
-            Some messages were ommited for optimization
+            {t("MESSAGES.SERVER_MESSAGES_OPTIMIZATION")}
           </WidgetContent>
         </Widget>
+
+        {/* Mapping the messages */}
         {(isRunning || isStarting) &&
           messages.map((row) =>
             row.type === "message" ? (
-              <Line key={Math.random()}>{row.content as string}</Line>
+              <Line key={Math.random()}>
+                {row.isInternational
+                  ? (t(row.content as string) as string)
+                  : (row.content as string)}
+              </Line>
             ) : (
-              <Widget>
+              <Widget key={Math.random()}>
                 <WidgetIcon type={(row.content as IInstanceWidget).icon}>
                   {handleGetWidgetIcon((row.content as IInstanceWidget).icon)}
                 </WidgetIcon>
                 <WidgetContent>
-                  {(row.content as IInstanceWidget).message}
+                  {row.isInternational
+                    ? t((row.content as IInstanceWidget).message)
+                    : (row.content as IInstanceWidget).message}
                 </WidgetContent>
               </Widget>
             )

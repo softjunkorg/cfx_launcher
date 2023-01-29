@@ -21,4 +21,5 @@ export interface IResource {
 export interface ICustomField {
   name: string;
   value: string;
+  isPrivate: boolean;
 }

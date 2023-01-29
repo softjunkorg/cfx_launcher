@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {
+  CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
@@ -41,6 +42,7 @@ import CountrySelect from "renderer/components/CountrySelect";
 import EditableCell from "renderer/components/EditableCell";
 import Field from "renderer/components/Field";
 import { useLoadingFields } from "renderer/hooks";
+import { useTheme } from "styled-components";
 import { ICustomField } from "types";
 import { FullSpace, Panel, UploadContainer, UploadImage } from "./styles";
 
@@ -696,15 +698,11 @@ const defaultConfiguration: IPanelConfig[] = [
     name: "PANELS.CUSTOM_FIELDS.NAME",
     useChildren: (t, replicated, setReplicated) => {
       const { modal } = App.useApp();
+      const theme = useTheme();
       const [form] = Form.useForm();
       const [name, setName] = useState<string>("");
       const [open, setOpen] = useState<boolean>(false);
       const [editingField, setEditingField] = useState("");
-
-      interface Item {
-        name: string;
-        value: string;
-      }
 
       // Handling field creation
       const handleCreate = () => {
@@ -718,6 +716,7 @@ const defaultConfiguration: IPanelConfig[] = [
               {
                 name,
                 value: null,
+                isPrivate: false,
               },
             ],
           });
@@ -753,8 +752,13 @@ const defaultConfiguration: IPanelConfig[] = [
       };
 
       // Handling field edit
-      const handleEdit = (record: Partial<Item>) => {
-        form.setFieldsValue({ name: "", value: "", ...record });
+      const handleEdit = (record: Partial<ICustomField>) => {
+        form.setFieldsValue({
+          name: "",
+          value: "",
+          isPrivate: false,
+          ...record,
+        });
         if (record.name) setEditingField(record.name);
       };
 
@@ -843,9 +847,30 @@ const defaultConfiguration: IPanelConfig[] = [
                       },
                       {
                         align: "center",
+                        title: t("FIELDS.COMMON.PRIVATE"),
+                        dataIndex: "isPrivate",
+                        render: (value: boolean) => (
+                          <>
+                            {value ? (
+                              <CheckOutlined
+                                style={{ color: theme.colorInfo }}
+                              />
+                            ) : (
+                              <CloseOutlined
+                                style={{ color: theme.colorError }}
+                              />
+                            )}
+                          </>
+                        ),
+                        width: "65%",
+                        required: true,
+                        editable: true,
+                      },
+                      {
+                        align: "center",
                         title: t("FIELDS.COMMON.ACTION"),
                         dataIndex: "action",
-                        render: (_: any, record: Item) => {
+                        render: (_: any, record: ICustomField) => {
                           const editable = record.name === editingField;
                           return editable ? (
                             <Space style={{ display: "flex" }}>
@@ -896,10 +921,10 @@ const defaultConfiguration: IPanelConfig[] = [
 
                       return {
                         ...col,
-                        onCell: (record: Item) => ({
+                        onCell: (record: ICustomField) => ({
                           record,
                           inputType:
-                            col.dataIndex === "age" ? "number" : "text",
+                            col.dataIndex === "isPrivate" ? "checkbox" : "text",
                           dataIndex: col.dataIndex,
                           title: col.title,
                           editing: record.name === editingField,
@@ -943,6 +968,7 @@ const defaultConfiguration: IPanelConfig[] = [
                       align: "center",
                       name: field.name,
                       value: field.value,
+                      isPrivate: field.isPrivate,
                     }))) ||
                   []
                 }

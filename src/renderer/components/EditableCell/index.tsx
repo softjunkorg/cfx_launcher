@@ -1,4 +1,4 @@
-import { InputNumber, Input, Form } from "antd";
+import { Checkbox, Input, Form } from "antd";
 import { Rule } from "antd/es/form";
 import { FC } from "react";
 
@@ -6,7 +6,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
-  inputType: "number" | "text";
+  inputType: "checkbox" | "text";
   record: any;
   index: number;
   required: boolean;
@@ -26,7 +26,7 @@ const EditableCell: FC<EditableCellProps> = ({
   customRules,
   ...restProps
 }) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+  const inputNode = inputType === "checkbox" ? <Checkbox /> : <Input />;
 
   return (
     <td {...restProps}>
@@ -34,6 +34,7 @@ const EditableCell: FC<EditableCellProps> = ({
         <Form.Item
           name={dataIndex}
           style={{ margin: 0 }}
+          valuePropName={inputType === "checkbox" ? "checked" : "value"}
           rules={[
             {
               required,

@@ -1,8 +1,9 @@
-import { exec, spawn } from "child_process";
+import { spawn } from "child_process";
 import { app } from "electron";
 import fs from "fs";
 import path from "path";
 import {
+  IInstanceMessage,
   InstanceErrors,
   InstanceEvents,
   InstanceStatus,
@@ -14,7 +15,7 @@ import {
   TempConfig,
   TempResources,
 } from "../../handlers/instance";
-import { ansi, store, wait, window, cache, events } from "../../utils";
+import { ansi, cache, events, store, wait, window } from "../../utils";
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -90,6 +91,12 @@ async function startInstance() {
     }
   );
 
+  // Sending starting widget
+  window.request(InstanceEvents.MESSAGE, {
+    type: "widget",
+    content: { icon: "info", message: "Sever starting..." },
+  } as IInstanceMessage);
+
   // Subscribe for terminal data
   let currentLine = "";
   const onData = (data: any) => {
@@ -138,8 +145,9 @@ async function startInstance() {
         setTimeout(() => {
           window.request(InstanceEvents.MESSAGE, {
             type: "widget",
+            isInternational: true,
             content: { icon: "success", message: "Server authenticated" },
-          });
+          } as IInstanceMessage);
         }, 5);
       }
 
@@ -147,7 +155,7 @@ async function startInstance() {
       window.request(InstanceEvents.MESSAGE, {
         type: "message",
         content: currentLine,
-      });
+      } as IInstanceMessage);
       currentLine = "";
     }
 

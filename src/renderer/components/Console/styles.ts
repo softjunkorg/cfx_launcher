@@ -59,9 +59,9 @@ export const Messenger = styled.div`
 export const Widget = styled.div`
   width: 100%;
   height: fit-content;
-  padding: ${(props) => props.theme.padding}px;
+  padding: ${(props) => props.theme.paddingSM}px;
   background: ${(props) => props.theme.colorFillAlter};
-  border-radius: ${(props) => props.theme.borderRadius}px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   margin: 5px 0;
@@ -104,7 +104,6 @@ export const WidgetIcon = styled.div<IWidgetIconProps>`
 
         default:
           return ``;
-          break;
       }
     }}
   }
