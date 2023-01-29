@@ -22,7 +22,7 @@ const config = {
       instanceConfig: {
         sv_projectDesc: "Default FXServer requiring configuration",
         sv_projectName: "My FXServer Project",
-        tags: ["default"],
+        tags: [],
         locale: null,
         sv_master1: false,
         sv_scriptHookAllowed: 0,

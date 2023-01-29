@@ -1,6 +1,6 @@
 {
   "name": "cfx-launcher",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A Cfx.re launcher created for FiveN and RedM, with better control on the server.",
   "license": "MIT",
   "author": {

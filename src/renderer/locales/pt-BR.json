@@ -1,130 +1,169 @@
 {
-  "TABS": {
-    "TERMINAL": "Terminal",
-    "RESOURCES": "Resources",
-    "INSTANCE_CONFIG": "Configurações da Instancia",
-    "SETTINGS": "Configurações"
+  "ACTIONS": {
+    "BROWSE": "Procurar",
+    "CANCEL": "Cancelar",
+    "DELETE": "Deletar",
+    "EDIT": "Editar",
+    "NEW_FIELD": "Nova Informação",
+    "UPLOAD": "Upload",
+    "REFRESH": "Atualizar",
+    "RESTART": "Reiniciar",
+    "SAVE": "Salvar",
+    "SEND": "Enviar",
+    "START": "Iniciar",
+    "STOP": "Desligar"
+  },
+  "BOOLEAN": {
+    "FALSE": "Falso",
+    "TRUE": "Verdadeiro"
+  },
+  "BUILDS": {
+    "LATEST": "Ultima"
+  },
+  "DIALOGS": {
+    "CREATE_CUSTOM_FIELD_BODY": "Escreva o nome da nova informação:",
+    "CREATE_CUSTOM_FIELD_HEADER": "Informação customizada",
+    "DELETE_CUSTOM_FIELD_BODY": "Você realmente deseja deletar a informação {{field}}?",
+    "DELETE_CUSTOM_FIELD_HEADER": "Informação customizada",
+    "RESOURCE_DELETE_BODY": "Você realmente deseja deletar a resource {{resource}}?",
+    "RESOURCE_DELETE_HEADER": "Deletar",
+    "SERVER_RESTART_BODY": "Você realmente deseja reiniciar o servidor?",
+    "SERVER_RESTART_HEADER": "Reiniciar",
+    "SERVER_STOP_BODY": "Você realmente deseja desligar o servidor?",
+    "SERVER_STOP_HEADER": "Desligar",
+    "WANT_TO": "Você deseja {{action}}?"
+  },
+  "ERRORS": {
+    "INSTANCE": {
+      "ARTIFACTS_FOLDER_ERROR": "A pasta Artefatos não existe ou não está definida.",
+      "NOT_RUNNING": "O servidor ainda não está em execução.",
+      "RESOURCES_FOLDER_ERROR": "A pasta de Resources não existe ou não está definida."
+    },
+    "RESOURCES": {
+      "FOLDER_ERROR": "A pasta de Resources não existe ou não está definida.",
+      "INVALID_RESOURCE": "A resource {{resource}} não existe."
+    },
+    "UPLOAD": {
+      "IMAGE_EXTENSION": "Você pode apenas uplodar um arquvi JPG/PNG/GIF.",
+      "SIZE_UPLOAD": "A imagem deve ser menor que 10MB!"
+    }
+  },
+  "FIELDS": {
+    "COMMON": {
+      "ACTION": "Ação",
+      "ACTIVE": "Ativo",
+      "NAME": "Nome",
+      "PATH": "Caminho",
+      "PRIVATE": "Privado",
+      "VALUE": "Valor"
+    },
+    "SETTINGS": {
+      "ARTIFACTS_FOLDER": "Pasta de Artefatos",
+      "INSTANCE_ARGUMENTS": "Argumentos da instância",
+      "LANGUAGE": "Linguagem",
+      "RESOURCES_FOLDER": "Pasta de Recursos"
+    }
   },
   "HEADER": {
     "TITLE": "Launcher"
   },
-  "ACTIONS": {
-    "CANCEL": "Cancelar",
-    "START": "Iniciar",
-    "STOP": "Desligar",
-    "RESTART": "Reiniciar",
-    "REFRESH": "Atualizar",
-    "SEND": "Enviar",
-    "BROWSE": "Procurar",
-    "SAVE": "Salvar",
-    "DELETE": "Deletar"
-  },
-  "STATUS": {
-    "WORD": "Status",
-    "STARTING": "Iniciando",
-    "STOPPED": "Desligado",
-    "STARTED": "Iniciado"
-  },
-  "MESSAGES": {
-    "SERVER_ERROR": "Ocorreu um erro no servidor. Código: {{code}}",
-    "SERVER_STARTED": "Servidor iniciado.",
-    "SERVER_START_SUCCESS": "Iniciando o servidor...",
-    "SERVER_START_ERROR": "Algum erro ocorreu ao iniciar o servidor.",
-    "SERVER_STOPPED": "O servidor está atualmente desligado",
-    "SERVER_STOP_SUCCESS": "Desligando o servidor...",
-    "SERVER_STOP_ERROR": "Algum erro ocorreu ao desligar o servidor.",
-    "SERVER_RESTART_SUCCESS": "Reiniciando o servidor...",
-    "SERVER_RESTART_ERROR": "Algum erro ocorreu ao reiniciar o servidor.",
-    "SERVER_REFRESH_SUCCESS": "Atualizando o servidor...",
-    "SERVER_REFRESH_ERROR": "Algum erro ocorreu ao atualizar o servidor.",
-    "SERVER_EXECUTE_COMMAND_SUCCESS": "O comando foi executado com sucesso.",
-    "SERVER_EXECUTE_COMMAND_ERROR": "Ocorreu um erro na execução do comando.",
-    "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. {{error}}",
-    "RESOURCE_DELETED": "Resource {{resource}} foi deletada."
-  },
-  "ERRORS": {
-    "FOLDER_DOESNT_EXISTS": "A pasta não existe.",
-    "NO_FOLDER_SET": "Nenhuma pasta definida.",
-    "INVALID_RESOURCE": "Resource inválida."
-  },
-  "FIELDS": {
-    "SETTINGS": {
-      "ARTIFACTS_FOLDER": "Pasta de Artefatos",
-      "RESOURCES_FOLDER": "Pasta de Recursos",
-      "INSTANCE_ARGUMENTS": "Argumentos da instância",
-      "LANGUAGE": "Linguagem"
+  "LANGUAGES": {
+    "en-US": {
+      "LOCAL_NAME": "English, US",
+      "UNIVERSAL_NAME": "Inglês, EUA"
+    },
+    "pt-BR": {
+      "LOCAL_NAME": "Português do Brasil",
+      "UNIVERSAL_NAME": "Português do Brasil"
     }
   },
-  "PLACEHOLDERS": {
-    "TYPEHERE": "Digite aqui...",
-    "SELECTHERE": "Selecione..."
+  "MESSAGES": {
+    "NEW_RESOURCES": "Foi adicionado {{count}} nova(s) resource(s) para a lista.",
+    "RESOURCE_ADDED": "Foi adicionado a resource {{resource}} para a lista.",
+    "RETIRED_RESOURCES": "Foi removido {{count}} resources deletadas da lista.",
+    "SERVER_AUTHENTICATED": "Server autenticado ao Nucleus",
+    "SERVER_MESSAGES_OPTIMIZATION": "Algumas mensagens foram omitidas pela otimização",
+    "RESOURCE_DELETED": "Resource {{resource}} foi deletada.",
+    "SERVER_ERROR": "Ocorreu um erro no servidor. Código: {{code}}",
+    "SERVER_EXECUTE_COMMAND_ERROR": "Ocorreu um erro na execução do comando.",
+    "SERVER_EXECUTE_COMMAND_SUCCESS": "O comando foi executado com sucesso.",
+    "SERVER_REFRESH_ERROR": "Algum erro ocorreu ao atualizar o servidor.",
+    "SERVER_REFRESH_SUCCESS": "Atualizando o servidor",
+    "SERVER_RESTART_ERROR": "Algum erro ocorreu ao reiniciar o servidor.",
+    "SERVER_RESTART_SUCCESS": "Reiniciando o servidor",
+    "SERVER_START_ERROR": "Algum erro ocorreu ao iniciar o servidor.",
+    "SERVER_START_SUCCESS": "Iniciando o servidor",
+    "SERVER_STARTED": "Servidor iniciado.",
+    "SERVER_STOP_ERROR": "Algum erro ocorreu ao desligar o servidor.",
+    "SERVER_STOP_SUCCESS": "Desligando o servidor",
+    "SERVER_STOPPED": "O servidor está atualmente desligado",
+    "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. {{error}}"
   },
-  "DIALOGS": {
-    "SERVER_STOP_HEADER": "Desligar",
-    "SERVER_STOP_BODY": "Você realmente deseja desligar o servidor?",
-    "SERVER_RESTART_HEADER": "Reiniciar",
-    "SERVER_RESTART_BODY": "Você realmente deseja reiniciar o servidor?"
+  "MODE": {
+    "DISABLED": "Desabilitado",
+    "OFF": "Desligado",
+    "ON": "Ligado"
   },
   "PANELS": {
-    "SERVER": "Server",
+    "CUSTOM_FIELDS": {
+      "NAME": "Informações customizadas"
+    },
     "PROJECT": {
       "NAME": "Projeto",
       "TAGS": {
-        "NAME": "Nome",
+        "BANNER_CONNECTING": "Banner de Conexão",
+        "BANNER_DETAIL": "Banner de Detalhes",
         "DESCRIPTION": "Descrição",
+        "ICON": "Icone",
         "LOCALE": "Localidade",
+        "NAME": "Nome",
         "TAGS": "Tags"
+      }
+    },
+    "SERVER": "Server",
+    "SERVER_CONNECTION": {
+      "NAME": "Conexão",
+      "TAGS": {
+        "ENDPOINT_PRIVACY": "Endpoint Privacy",
+        "MAX_CLIENTS": "Máximo de jogadores",
+        "PURE_LEVEL": "Nível de Pureza",
+        "TCP_ENDPOINT": "TCP Endpoint",
+        "UDP_ENDPOINT": "UDP Endpoint"
       }
     },
     "SERVER_PROPERTIES": {
       "NAME": "Propriedades",
       "TAGS": {
-        "HOSTNAME": "Hostname",
         "GAMEBUILD": "Build do jogo",
         "GAMENAME": "Nome do jogo",
-        "PRIVATE": "Privado",
+        "HOSTNAME": "Hostname",
         "ONESYNC": "OneSync",
+        "PRIVATE": "Privado",
         "SCRIPT_HOOK": "Script Hook"
-      }
-    },
-    "SERVER_CONNECTION": {
-      "NAME": "Conexão",
-      "TAGS": {
-        "TCP_ENDPOINT": "TCP Endpoint",
-        "UDP_ENDPOINT": "UDP Endpoint",
-        "MAX_CLIENTS": "Máximo de jogadores",
-        "PURE_LEVEL": "Nível de Pureza",
-        "ENDPOINT_PRIVACY": "Endpoint Privacy"
       }
     },
     "SERVER_SECRET": {
       "NAME": "Secret",
       "TAGS": {
-        "STEAM_API_KEY": "Chave Steam API",
-        "LICENSE_KEY": "Chave de licença"
+        "LICENSE_KEY": "Chave de licença",
+        "STEAM_API_KEY": "Chave Steam API"
       }
     }
   },
-  "BOOLEAN": {
-    "TRUE": "Verdadeiro",
-    "FALSE": "Falso"
+  "PLACEHOLDERS": {
+    "SELECTHERE": "Selecione...",
+    "TYPEHERE": "Digite aqui..."
   },
-  "MODE": {
-    "ON": "Ligado",
-    "OFF": "Desligado",
-    "DISABLED": "Desabilitado"
+  "STATUS": {
+    "STARTED": "Iniciado",
+    "STARTING": "Iniciando",
+    "STOPPED": "Desligado",
+    "WORD": "Status"
   },
-  "BUILDS": {
-    "LATEST": "Ultima"
-  },
-  "LANGUAGES": {
-    "pt-BR": {
-      "LOCAL_NAME": "Português do Brasil",
-      "UNIVERSAL_NAME": "Português do Brasil"
-    },
-    "en-US": {
-      "LOCAL_NAME": "English, US",
-      "UNIVERSAL_NAME": "Inglês, EUA"
-    }
+  "TABS": {
+    "INSTANCE_CONFIG": "Configurações da Instancia",
+    "RESOURCES": "Resources",
+    "SETTINGS": "Configurações",
+    "TERMINAL": "Terminal"
   }
 }

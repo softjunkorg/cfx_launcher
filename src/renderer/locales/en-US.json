@@ -90,7 +90,6 @@
     "SERVER_REFRESH_SUCCESS": "Refreshing the server",
     "SERVER_RESTART_ERROR": "An error happened on the restart process.",
     "SERVER_RESTART_SUCCESS": "Restarting the server",
-    "SERVER_STARTING": "Starting the server",
     "SERVER_START_ERROR": "An error happened on the start process.",
     "SERVER_START_SUCCESS": "Starting the server",
     "SERVER_STARTED": "Server started",
