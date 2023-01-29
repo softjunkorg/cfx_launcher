@@ -13,7 +13,6 @@ import {
   Button,
   Col,
   Collapse,
-  Empty,
   Form,
   Input,
   InputNumber,
@@ -24,7 +23,6 @@ import {
   Space,
   Table,
   Tooltip,
-  Typography,
   Upload,
 } from "antd";
 import { ColumnType } from "antd/es/table";
@@ -36,7 +34,7 @@ import {
 import baseConfig from "config";
 import merge from "deepmerge";
 import { TFunction } from "i18next";
-import { FC, Key, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CountrySelect from "renderer/components/CountrySelect";
 import EditableCell from "renderer/components/EditableCell";
@@ -142,17 +140,11 @@ const defaultConfiguration: IPanelConfig[] = [
           file.type !== "image/png" &&
           file.type !== "image/gif"
         ) {
-          message.open({
-            type: "error",
-            content: t("ERRORS.UPLOAD.IMAGE_EXTENSION"),
-          });
+          message.error(t("ERRORS.UPLOAD.IMAGE_EXTENSION"));
           return false;
         }
         if (!(file.size / 1024 / 1024 < 10)) {
-          message.open({
-            type: "error",
-            content: t("ERRORS.UPLOAD.SIZE_UPLOAD"),
-          });
+          message.error(t("ERRORS.UPLOAD.SIZE_UPLOAD"));
           return false;
         }
 
@@ -189,6 +181,7 @@ const defaultConfiguration: IPanelConfig[] = [
                 label={t("PANELS.PROJECT.TAGS.NAME")}
                 component={
                   <Input
+                    allowClear
                     placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                     value={replicated.sv_projectName}
                     onInput={(e) =>
@@ -206,6 +199,7 @@ const defaultConfiguration: IPanelConfig[] = [
                 label={t("PANELS.PROJECT.TAGS.DESCRIPTION")}
                 component={
                   <Input.TextArea
+                    allowClear
                     placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                     autoSize={{ minRows: 3, maxRows: 6 }}
                     value={replicated.sv_projectDesc}
@@ -295,6 +289,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.PROJECT.TAGS.BANNER_DETAIL")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.banner_detail}
                         onInput={(e) =>
@@ -311,6 +306,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.PROJECT.TAGS.BANNER_CONNECTING")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.banner_connecting}
                         onInput={(e) =>
@@ -359,6 +355,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.SERVER_PROPERTIES.TAGS.HOSTNAME")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.sv_hostname}
                         onInput={(e) =>
@@ -527,6 +524,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.SERVER_CONNECTION.TAGS.TCP_ENDPOINT")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.endpoint_add_tcp}
                         onInput={(e) =>
@@ -547,6 +545,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.SERVER_CONNECTION.TAGS.UDP_ENDPOINT")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.endpoint_add_udp}
                         onInput={(e) =>
@@ -656,6 +655,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.SERVER_SECRET.TAGS.STEAM_API_KEY")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.steam_webApiKey}
                         onInput={(e) =>
@@ -675,6 +675,7 @@ const defaultConfiguration: IPanelConfig[] = [
                     label={t("PANELS.SERVER_SECRET.TAGS.LICENSE_KEY")}
                     component={
                       <Input
+                        allowClear
                         placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                         value={replicated.sv_licenseKey}
                         onInput={(e) =>
@@ -812,6 +813,7 @@ const defaultConfiguration: IPanelConfig[] = [
             >
               <span>{t("DIALOGS.CREATE_CUSTOM_FIELD_BODY")}</span>
               <Input
+                allowClear
                 value={name}
                 onInput={(e) => setName(e.currentTarget.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}

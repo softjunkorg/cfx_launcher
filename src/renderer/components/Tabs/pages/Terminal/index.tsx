@@ -20,10 +20,7 @@ const Terminal: FC = () => {
       InstanceEvents.ERROR,
       (event, exitCode: number) => {
         setState(InstanceStatus.STOPPED);
-        message.open({
-          type: "error",
-          content: t("MESSAGES.SERVER_ERROR", { code: exitCode }),
-        });
+        message.error(t("MESSAGES.SERVER_ERROR", { code: exitCode }));
       }
     );
 

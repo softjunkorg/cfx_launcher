@@ -81,10 +81,7 @@ const Resources: FC & IResourcesExtraActions = () => {
     if (report) {
       switch (response[1]) {
         case ResourcesErrors.FOLDER_ERROR:
-          message.open({
-            type: "error",
-            content: t("ERRORS.RESOURCES.FOLDER_ERROR"),
-          });
+          message.error(t("ERRORS.RESOURCES.FOLDER_ERROR"));
           break;
 
         default:
@@ -120,19 +117,15 @@ const Resources: FC & IResourcesExtraActions = () => {
 
         // Handling the response
         if (response && response[0]) {
-          message.open({
-            type: "success",
-            content: t("MESSAGES.RESOURCE_DELETED", { resource }),
-          });
+          message.success(t("MESSAGES.RESOURCE_DELETED", { resource }));
         } else {
-          message.open({
-            type: "error",
-            content: t("MESSAGES.UNEXPECTED_ERROR", {
+          message.error(
+            t("MESSAGES.UNEXPECTED_ERROR", {
               error: i18n.exists(`ERRORS.${response[1]}`)
                 ? t(`ERRORS.${response[1]}`)
                 : `(${response[1]})`,
-            }),
-          });
+            })
+          );
         }
       }
     }

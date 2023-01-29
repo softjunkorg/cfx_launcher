@@ -13,7 +13,6 @@ i18n
       "pt-BR": { translation: pt_BR },
     },
     lng: "en-US",
-    debug: true,
   });
 
 export default i18n;

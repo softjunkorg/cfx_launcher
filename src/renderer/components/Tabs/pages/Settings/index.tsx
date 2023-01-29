@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CountrySelect from "renderer/components/CountrySelect";
 import Field from "renderer/components/Field";
-import { useLoadingFields } from "renderer/hooks";
+import { useInstanceStatus, useLoadingFields } from "renderer/hooks";
 import { application, events } from "renderer/services";
 import { useStoreActions } from "renderer/store/actions";
 import { SettingsEvents } from "types";
@@ -48,6 +48,7 @@ interface ISettingsExtraActions {
 const Settings: FC & ISettingsExtraActions = () => {
   const { t } = useTranslation();
   const { store } = useStoreActions();
+  const { isStarting, isRunning } = useInstanceStatus();
   const [replicated, setReplicated] = useState<any>(store.settings);
   const [loading, setLoading] = useLoadingFields({
     artifactsFolder: false,
@@ -149,11 +150,13 @@ const Settings: FC & ISettingsExtraActions = () => {
             label={t("FIELDS.SETTINGS.ARTIFACTS_FOLDER")}
             component={
               <Input.Search
+                allowClear
                 placeholder={t("PLACEHOLDERS.SELECTHERE") as string}
                 loading={loading.artifactsFolder}
                 value={replicated.artifactsFolder}
                 enterButton={t("ACTIONS.BROWSE")}
                 onSearch={handleFindArtifactsFolder}
+                disabled={isStarting || isRunning}
               />
             }
           />
@@ -163,11 +166,13 @@ const Settings: FC & ISettingsExtraActions = () => {
             label={t("FIELDS.SETTINGS.RESOURCES_FOLDER")}
             component={
               <Input.Search
+                allowClear
                 placeholder={t("PLACEHOLDERS.SELECTHERE") as string}
                 loading={loading.resourcesFolder}
                 value={replicated.resourcesFolder}
                 enterButton={t("ACTIONS.BROWSE")}
                 onSearch={handleFindResourcesFolder}
+                disabled={isStarting || isRunning}
               />
             }
           />
@@ -177,9 +182,11 @@ const Settings: FC & ISettingsExtraActions = () => {
             label={t("FIELDS.SETTINGS.INSTANCE_ARGUMENTS")}
             component={
               <Input
+                allowClear
                 placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
                 value={replicated.instanceArguments}
                 onInput={handleInstanceArguments}
+                disabled={isStarting || isRunning}
               />
             }
           />

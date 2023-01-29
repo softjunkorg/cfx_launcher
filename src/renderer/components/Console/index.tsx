@@ -53,10 +53,7 @@ const Console: FC = () => {
     // Listening to instance running
     const runningListener = application.listen(InstanceEvents.RUNNING, () => {
       setStatus(InstanceStatus.RUNNING);
-      message.open({
-        type: "success",
-        content: t("MESSAGES.SERVER_STARTED"),
-      });
+      message.success(t("MESSAGES.SERVER_STARTED"));
     });
 
     // Listening to message received

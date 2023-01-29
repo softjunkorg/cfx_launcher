@@ -15,31 +15,19 @@ export default function useInstanceActions() {
       const result = await application.request(InstanceEvents.START);
       if (result[0]) {
         setStatus(InstanceStatus.STARTING);
-        message.open({
-          type: "success",
-          content: t("MESSAGES.SERVER_START_SUCCESS"),
-        });
+        message.info(t("MESSAGES.SERVER_START_SUCCESS"));
       } else {
         switch (result[1]) {
           case InstanceErrors.ARTIFACTS_FOLDER_ERROR:
-            message.open({
-              type: "error",
-              content: t("ERRORS.INSTANCE.ARTIFACTS_FOLDER_ERROR"),
-            });
+            message.error(t("ERRORS.INSTANCE.ARTIFACTS_FOLDER_ERROR"));
             break;
 
           case InstanceErrors.RESOURCES_FOLDER_ERROR:
-            message.open({
-              type: "error",
-              content: t("ERRORS.INSTANCE.RESOURCES_FOLDER_ERROR"),
-            });
+            message.error(t("ERRORS.INSTANCE.RESOURCES_FOLDER_ERROR"));
             break;
 
           default:
-            message.open({
-              type: "error",
-              content: t("MESSAGES.SERVER_STOP_ERROR"),
-            });
+            message.error(t("MESSAGES.SERVER_STOP_ERROR"));
         }
       }
     }
@@ -53,15 +41,9 @@ export default function useInstanceActions() {
       const result = await application.request(InstanceEvents.STOP);
       if (result[0]) {
         setStatus(InstanceStatus.STOPPED);
-        message.open({
-          type: "info",
-          content: t("MESSAGES.SERVER_STOP_SUCCESS"),
-        });
+        message.info(t("MESSAGES.SERVER_STOP_SUCCESS"));
       } else {
-        message.open({
-          type: "error",
-          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
-        });
+        message.error(t("ERRORS.INSTANCE.NOT_RUNNING"));
       }
     }
   };
@@ -71,15 +53,9 @@ export default function useInstanceActions() {
       const result = await application.request(InstanceEvents.RESTART);
       if (result[0]) {
         setStatus(InstanceStatus.STARTING);
-        message.open({
-          type: "success",
-          content: t("MESSAGES.SERVER_RESTART_SUCCESS"),
-        });
+        message.info(t("MESSAGES.SERVER_RESTART_SUCCESS"));
       } else {
-        message.open({
-          type: "error",
-          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
-        });
+        message.error(t("ERRORS.INSTANCE.NOT_RUNNING"));
       }
     }
   };
@@ -91,15 +67,9 @@ export default function useInstanceActions() {
         "refresh"
       );
       if (result[0]) {
-        message.open({
-          type: "success",
-          content: t("MESSAGES.SERVER_REFRESH_SUCCESS"),
-        });
+        message.success(t("MESSAGES.SERVER_REFRESH_SUCCESS"));
       } else {
-        message.open({
-          type: "error",
-          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
-        });
+        message.error(t("ERRORS.INSTANCE.NOT_RUNNING"));
       }
     }
   };
@@ -111,15 +81,9 @@ export default function useInstanceActions() {
         command
       );
       if (result[0]) {
-        message.open({
-          type: "success",
-          content: t("MESSAGES.SERVER_EXECUTE_COMMAND_SUCCESS"),
-        });
+        message.success(t("MESSAGES.SERVER_EXECUTE_COMMAND_SUCCESS"));
       } else {
-        message.open({
-          type: "error",
-          content: t("ERRORS.INSTANCE.NOT_RUNNING"),
-        });
+        message.error(t("ERRORS.INSTANCE.NOT_RUNNING"));
       }
     }
   };
