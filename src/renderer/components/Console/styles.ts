@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Main = styled.div`
   width: 100%;
@@ -54,6 +54,66 @@ export const Messenger = styled.div`
   display: flex;
   align-items: center;
   padding: 7.5px;
+`;
+
+export const Widget = styled.div`
+  width: 100%;
+  height: fit-content;
+  padding: ${(props) => props.theme.padding}px;
+  background: ${(props) => props.theme.colorFillAlter};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  position: relative;
+`;
+
+interface IWidgetIconProps {
+  type: "success" | "error" | "warning" | "info";
+}
+
+export const WidgetIcon = styled.div<IWidgetIconProps>`
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  left: ${(props) => props.theme.padding}px;
+  font-size: ${(props) => props.theme.fontSizeLG}px;
+
+  & .anticon {
+    ${(props) => {
+      switch (props.type) {
+        case "success":
+          return css`
+            color: ${props.theme.colorSuccess};
+          `;
+
+        case "error":
+          return css`
+            color: ${props.theme.colorError};
+          `;
+
+        case "warning":
+          return css`
+            color: ${props.theme.colorWarning};
+          `;
+
+        case "info":
+          return css`
+            color: ${props.theme.colorInfo};
+          `;
+
+        default:
+          return ``;
+          break;
+      }
+    }}
+  }
+`;
+
+export const WidgetContent = styled.div`
+  width: fit-content;
+  height: fit-content;
+  margin: 0 auto;
 `;
 
 export const MessengerIcon = styled.div`

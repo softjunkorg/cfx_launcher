@@ -2,7 +2,13 @@ import { useInstanceStatus } from "renderer/hooks";
 import { application } from "renderer/services";
 import { useInstanceActions } from "renderer/store/actions";
 import { instanceStatus } from "renderer/store/state";
-import { InstanceEvents, InstanceStatus, ResourcesEvents } from "types";
+import {
+  InstanceEvents,
+  InstanceStatus,
+  ResourcesEvents,
+  IInstanceMessage,
+  IInstanceWidget,
+} from "types";
 import Line from "ansi-to-react";
 import { App, Button, Input, InputRef, Result } from "antd";
 import { FC, useEffect, useRef, useState } from "react";
@@ -10,11 +16,20 @@ import { useTranslation } from "react-i18next";
 import { TbTerminal } from "react-icons/tb";
 import { useRecoilState } from "recoil";
 import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  InfoCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
+import {
   Main,
   Messages,
   Messenger,
   MessengerIcon,
   StoppedMessage,
+  Widget,
+  WidgetContent,
+  WidgetIcon,
 } from "./styles";
 
 const Console: FC = () => {
@@ -23,8 +38,9 @@ const Console: FC = () => {
   const { executeCommand } = useInstanceActions();
   const { isStarting, isRunning, isStopped } = useInstanceStatus();
   const [, setStatus] = useRecoilState(instanceStatus);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<IInstanceMessage[]>([]);
   const [command, setCommand] = useState<string>("");
+  const [maxOpen, setMaxOpen] = useState<boolean>(false);
   const [sessionCommands, setSessionCommands] = useState({
     index: null as number | null,
     commands: [] as string[],
@@ -46,7 +62,7 @@ const Console: FC = () => {
     // Listening to message received
     const messageListener = application.listen(
       InstanceEvents.MESSAGE,
-      (event, data: string) => {
+      (event, data: IInstanceMessage) => {
         setMessages((store) => [...store, data]);
       }
     );
@@ -55,6 +71,7 @@ const Console: FC = () => {
     const stopListener = application.listen(InstanceEvents.STOPPED, () => {
       setSessionCommands({ commands: [], index: null });
       setMessages([]);
+      setMaxOpen(false);
     });
 
     // Listening to local resources update
@@ -97,6 +114,20 @@ const Console: FC = () => {
     lastMessageRef?.current?.scrollIntoView();
   });
 
+  // Optimizing the console
+  useEffect(() => {
+    // Checking messages max length
+    if (messages.length >= 100) {
+      const filterMessages = messages.filter((n, i) => i !== 0);
+      setMessages(filterMessages);
+
+      // Opening max open
+      if (!maxOpen) {
+        setMaxOpen(true);
+      }
+    }
+  }, [messages]);
+
   // Handling command insertion
   const handleSendCommand = async () => {
     if (command.length > 0) {
@@ -104,7 +135,7 @@ const Console: FC = () => {
 
       // Updating session commands
       setSessionCommands((obj) => ({
-        ...obj,
+        index: null,
         commands: [...obj.commands, command],
       }));
 
@@ -170,6 +201,26 @@ const Console: FC = () => {
     }
   };
 
+  // Getting the widget icon
+  const handleGetWidgetIcon = (icon: string) => {
+    switch (icon) {
+      case "success":
+        return <CheckCircleOutlined />;
+
+      case "error":
+        return <CloseCircleOutlined />;
+
+      case "warning":
+        return <WarningOutlined />;
+
+      case "info":
+        return <InfoCircleOutlined />;
+
+      default:
+        return false;
+    }
+  };
+
   return (
     <Main>
       {/* Messages */}
@@ -184,8 +235,28 @@ const Console: FC = () => {
             />
           </StoppedMessage>
         )}
-        {(isStarting || isRunning) &&
-          messages.map((row) => <Line key={Math.random()}>{row}</Line>)}
+        {/* Max Messages Widget */}
+        <Widget style={{ display: maxOpen ? "block" : "none" }}>
+          <WidgetIcon type="info">{handleGetWidgetIcon("info")}</WidgetIcon>
+          <WidgetContent>
+            Some messages were ommited for optimization
+          </WidgetContent>
+        </Widget>
+        {(isRunning || isStarting) &&
+          messages.map((row) =>
+            row.type === "message" ? (
+              <Line key={Math.random()}>{row.content as string}</Line>
+            ) : (
+              <Widget>
+                <WidgetIcon type={(row.content as IInstanceWidget).icon}>
+                  {handleGetWidgetIcon((row.content as IInstanceWidget).icon)}
+                </WidgetIcon>
+                <WidgetContent>
+                  {(row.content as IInstanceWidget).message}
+                </WidgetContent>
+              </Widget>
+            )
+          )}
         <div ref={lastMessageRef} />
       </Messages>
 

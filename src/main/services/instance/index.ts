@@ -133,9 +133,21 @@ async function startInstance() {
           instanceTempResources
         );
         instanceStatus = InstanceStatus.RUNNING;
+
+        // Sending authenticated widget
+        setTimeout(() => {
+          window.request(InstanceEvents.MESSAGE, {
+            type: "widget",
+            content: { icon: "success", message: "Server authenticated" },
+          });
+        }, 5);
       }
 
-      window.request(InstanceEvents.MESSAGE, currentLine); // Sending the data
+      // Sending the data
+      window.request(InstanceEvents.MESSAGE, {
+        type: "message",
+        content: currentLine,
+      });
       currentLine = "";
     }
 

@@ -1,4 +1,5 @@
 import { ChildProcessWithoutNullStreams } from "child_process";
+import { ReactNode } from "react";
 
 export enum InstanceStatus {
   STOPPED = "INSTANCE_STOPPED",
@@ -24,6 +25,16 @@ export enum InstanceErrors {
   ARTIFACTS_FOLDER_ERROR = "ERROR::INSTANCE_ARTIFACTS_FOLDER_ERROR",
   RESOURCES_FOLDER_ERROR = "ERROR::INSTANCE_RESOURCES_FOLDER_ERROR",
   NOT_RUNNING = "ERROR::INSTANCE_NOT_RUNNING",
+}
+
+export interface IInstanceWidget {
+  icon: "success" | "error" | "warning" | "info";
+  message: string;
+}
+
+export interface IInstanceMessage {
+  type: "message" | "widget";
+  content: string | IInstanceWidget;
 }
 
 export type TInstanceProcess = ChildProcessWithoutNullStreams | null;
