@@ -1,33 +1,29 @@
 # Cfx Launcher 🚀
 
-Welcome to the Cfx Launcher, created by the Softjunk Team. This launcher is designed to make it easy for you to launch and manage your own FiveM server 🖥️
+Bem-vindo ao Cfx Launcher, criado pela equipe Softjunk. Este launcher foi projetado para facilitar a inicialização e o gerenciamento do seu próprio servidor no FiveM 🖥️
 
-## Features ⭐
+## Porque usar o launcher? ⭐
 
-- Easy to use interface 😀
-- Automatic updates ⬆️
-- Customizable settings ⚙️
-- Support for multiple servers 💂
-- Built-in server management tools 🔧
+- Interface fácil de usar 😀
+- Atualizações automáticas ⬆️
+- Configurações personalizáveis ⚙️
+- Suporte para vários servidores 💂
+- Ferramentas de gerenciamento de servidor integradas 🔧
 
-## Installation 💾
+## Instalação 💾
 
-1. Download the latest version of the Cfx Launcher from the releases page on GitHub ⬇️
-2. Run the installer and follow the prompts to install the launcher 💿
-3. Use the built-in server management tools to configure and launch your server 🚀
+1. Baixe a versão mais recente do Cfx Launcher na página de releases no GitHub ⬇️
+2. Execute o installer e siga as instruções para instalar o launcher 💿
+3. Use as ferramentas integradas de gerenciamento de servidor para configurar e iniciar seu servidor 🚀
 
-## Customization ⚙️
+## Customização ⚙️
 
-The Cfx Launcher allows you to customize various settings for your server. You can change the server name, max players, and more. You can also install and manage server resources and scripts.
+O Cfx Launcher permite que você personalize várias configurações para o seu servidor. Você pode alterar o nome do servidor, o número máximo de jogadores e muito mais. Você também pode instalar e gerenciar resources e scripts do servidor.
 
-## Maintenance 🔧
+## Solução de problemas ⚠️
 
-The launcher also provides tools to manage your server, such as start, stop, restart and monitor the server status
+Se você encontrar algum problema com o Cfx Launcher, verifique as perguntas frequentes ou entre em contato com a equipe de suporte (softjunkdevs@gmail.com) 📞
 
-## Troubleshooting ⚠️
+## Conclusão 🎉
 
-If you encounter any issues with the Cfx Launcher, please check the FAQ on the Softjunk Team website or contact the support team 📞
-
-## Conclusion 🎉
-
-We hope you enjoy using the Cfx Launcher by Softjunk Team. If you have any suggestions or feedback, please let us know 😀. We are constantly working to improve the launcher and make it the best experience for our users.
+Esperamos que você goste de usar o Cfx Launcher da Softjunk Team. Se você tiv vvber alguma sugestão ou feedback, informe-nos 😀. Estamos constantemente trabalhando para melhorar o launcher e torná-lo a melhor experiência para nossos usuários.
