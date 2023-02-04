@@ -25,6 +25,7 @@ import { FullSpace } from "../InstanceConfig/styles";
 import { Main } from "../sharedStyles";
 
 const Action: FC = () => {
+  const { store } = useStoreActions();
   const { t } = useTranslation();
 
   // Handling the refresh
@@ -33,7 +34,11 @@ const Action: FC = () => {
   };
 
   return (
-    <Button onClick={handleRefresh} type="primary">
+    <Button
+      onClick={handleRefresh}
+      type="primary"
+      disabled={store.resources.length === 0}
+    >
       {t("ACTIONS.REFRESH")}
     </Button>
   );
