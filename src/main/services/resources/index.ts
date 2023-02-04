@@ -2,6 +2,7 @@ import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
 import chokidar, { FSWatcher } from "chokidar";
+import lodash, { List } from "lodash";
 import {
   InstanceEvents,
   IResource,
@@ -10,7 +11,7 @@ import {
 } from "../../../types";
 import { InstanceResources } from "../../handlers/resources";
 import { TempResources } from "../../handlers/instance";
-import { events, store, wait, window } from "../../utils";
+import { events, store, window } from "../../utils";
 
 let watcherProcess: FSWatcher | null = null;
 
@@ -65,9 +66,10 @@ window.listen(ResourcesEvents.DELETE, deleteResource);
 // Listening to resourcesFolder changes once server is started
 async function startWatching(_: any, tempResources: TempResources) {
   const folder = store.get("settings.resourcesFolder") as string;
+  let resources = store.get("resources") as IResource[];
 
   // Checking runtime
-  if (!folder || !fs.existsSync(folder))
+  if (!folder || !fs.existsSync(folder) || !resources)
     return [false, ResourcesErrors.FOLDER_ERROR];
 
   // Creating the process
@@ -75,9 +77,60 @@ async function startWatching(_: any, tempResources: TempResources) {
     ignored: /(^|[/\\])node_modules$/,
   });
 
+  // On wather process change
+  watcherProcess.on("change", async (change: string) => {
+    resources = store.get("resources") as IResource[];
+
+    // Creating watchOptions paths
+    const watchPaths = {} as { [x: string]: string };
+    const watchResources = resources.filter(
+      (r) =>
+        r.active === true &&
+        r?.watchOptions.active === true &&
+        r?.watchOptions.paths.length > 0
+    );
+
+    // Mapping resources that need to watch
+    watchResources.map((r) => {
+      if (r?.watchOptions.paths) {
+        r?.watchOptions.paths.map((p) => {
+          watchPaths[p] = r.name;
+          return true;
+        });
+      }
+
+      return true;
+    });
+
+    Object.entries(watchPaths).map((row) => {
+      const resource = resources.find((r) => r.name === row[1]);
+      const resourcePath = path.resolve(folder, resource?.path || "");
+
+      // Checking the resource
+      if (fs.existsSync(resourcePath)) {
+        if (
+          path.resolve(change).startsWith(path.resolve(resourcePath, row[0]))
+        ) {
+          events.emit(InstanceEvents.EXECUTE_COMMAND, "refresh");
+          events.emit(
+            InstanceEvents.EXECUTE_COMMAND,
+            resource?.watchOptions.command.replace("{{name}}", resource?.name)
+          );
+
+          // Sending message to front
+          window.request(ResourcesEvents.LOCAL_CHANGE, resource?.name);
+
+          return true;
+        }
+      }
+
+      return null;
+    });
+  });
+
   // On watcher process add directory
   watcherProcess.on("addDir", async (resource: string) => {
-    const resources = store.get("resources") as IResource[];
+    resources = store.get("resources") as IResource[];
     const content = await fsp.readdir(resource);
     const name = resource.split("\\")[resource.split("\\").length - 1];
 
@@ -118,7 +171,7 @@ async function startWatching(_: any, tempResources: TempResources) {
 
   // On watcher process unlink directory
   watcherProcess.on("unlinkDir", async (resource: string) => {
-    const resources = store.get("resources") as IResource[];
+    resources = store.get("resources") as IResource[];
     const name = resource.split("\\")[resource.split("\\").length - 1];
 
     // Checking if it is really a resource
@@ -163,3 +216,16 @@ function stopWatching() {
 }
 
 events.on(InstanceEvents.STOPPED, stopWatching);
+
+// Change resource state
+function listenToResourceState() {
+  const unsubscribe = store.onDidChange("resources", (newValue, oldValue) => {
+    const inspect = newValue?.filter((r) =>
+      oldValue?.find((d) => d.name === r.name)
+    );
+  });
+
+  events.on(InstanceEvents.STOPPED, unsubscribe);
+}
+
+events.on(InstanceEvents.RUNNING, listenToResourceState);

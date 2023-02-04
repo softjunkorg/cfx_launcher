@@ -1,11 +1,27 @@
-import { application, events } from "renderer/services";
-import { useStoreActions } from "renderer/store/actions";
-import { DeleteOutlined } from "@ant-design/icons";
-import { IResource, ResourcesErrors, ResourcesEvents } from "types";
-import { App, Breadcrumb, Button, Spin, Switch, Table, Tooltip } from "antd";
+import { BranchesOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  App,
+  Breadcrumb,
+  Button,
+  Col,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Space,
+  Spin,
+  Switch,
+  Table,
+  Tooltip,
+} from "antd";
+import i18n from "i18next";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "i18next";
+import Field from "renderer/components/Field";
+import { application, events } from "renderer/services";
+import { useStoreActions } from "renderer/store/actions";
+import { IResource, ResourcesErrors, ResourcesEvents } from "types";
+import { FullSpace } from "../InstanceConfig/styles";
 import { Main } from "../sharedStyles";
 
 const Action: FC = () => {
@@ -32,6 +48,15 @@ const Resources: FC & IResourcesExtraActions = () => {
   const { store, changeStore } = useStoreActions();
   const { message, modal } = App.useApp();
   const [loading, setLoading] = useState<boolean>(true);
+  const [configuratingFields, setConfiguratingFields] = useState({
+    paths: [] as string[],
+    command: "",
+    active: false,
+  });
+  const [configurating, setConfigurating] = useState({
+    open: false,
+    resource: "",
+  });
 
   // Handling resources addition
   const handleAddResources = (resources: IResource[]) => {
@@ -48,6 +73,13 @@ const Resources: FC & IResourcesExtraActions = () => {
             ? row.path.replace(`${store.settings.resourcesFolder}\\`, "")
             : row.path,
           active: match ? match?.active : true,
+          watchOptions: match
+            ? match?.watchOptions
+            : {
+                active: false,
+                command: "ensure {{name}}",
+                paths: [],
+              },
         };
       });
 
@@ -105,7 +137,7 @@ const Resources: FC & IResourcesExtraActions = () => {
     }
   };
 
-  // Delete
+  /* Handling delete */
   const handleDelete = async (resource: string) => {
     async function trigger() {
       const data = store.resources.find((r) => r.name === resource);
@@ -139,10 +171,59 @@ const Resources: FC & IResourcesExtraActions = () => {
     });
   };
 
+  // Handling config
+  const handleConfig = (name: string) => {
+    if (store.resources) {
+      const resource = store.resources.find((r) => r.name === name);
+      if (resource) {
+        setConfiguratingFields(resource.watchOptions);
+        setConfigurating({ open: true, resource: name });
+      }
+    }
+  };
+
+  // handling update config field
+  const handleUpdateConfigField = (
+    name: keyof typeof configuratingFields,
+    value: any
+  ) => {
+    if (configuratingFields[name] !== null && value !== null) {
+      setConfiguratingFields((obj) => ({ ...obj, [name]: value }));
+    }
+  };
+
+  // Handling reset
+  const handleReset = () => {
+    setConfiguratingFields({ paths: [], command: "", active: false });
+    setConfigurating({ open: false, resource: "" });
+  };
+
+  // Handling configuration save
+  const handleSaveConfig = () => {
+    if (configuratingFields && configurating.resource) {
+      const data = store.resources.find(
+        (r) => r.name === configurating.resource
+      );
+
+      // Changing store
+      if (data) {
+        const resources = store.resources.filter(
+          (r) => r.name !== configurating.resource
+        );
+        resources.push({ ...data, watchOptions: configuratingFields });
+        changeStore({
+          resources,
+        });
+      }
+
+      // Cleaning the fields
+      handleReset();
+    }
+  };
+
+  // Handling refresh listener
   useEffect(() => {
     const refreshListener = events.on(ResourcesEvents.REFRESH, handleFetch);
-
-    // Cleaning up
     return () => {
       events.off(ResourcesEvents.REFRESH, refreshListener);
     };
@@ -154,74 +235,159 @@ const Resources: FC & IResourcesExtraActions = () => {
   }, [store.settings.resourcesFolder]);
 
   return (
-    <Spin size="large" spinning={loading}>
-      <Main>
-        <Table
-          sticky
-          columns={[
-            {
-              title: t("FIELDS.COMMON.NAME"),
-              dataIndex: "name",
-              width: "20%",
-            },
-            {
-              title: t("FIELDS.COMMON.PATH"),
-              dataIndex: "path",
-              width: "30%",
-            },
-            {
-              align: "center",
-              title: t("FIELDS.COMMON.ACTION"),
-              dataIndex: "action",
-              width: "8%",
-            },
-            {
-              align: "center",
-              title: t("FIELDS.COMMON.ACTIVE"),
-              dataIndex: "active",
-              width: "8%",
-            },
-          ]}
-          dataSource={
-            (!loading &&
-              store.resources &&
-              [...store.resources]
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((row, i) => ({
-                  key: i,
-                  align: "center",
-                  name: row.name,
-                  path: (
-                    <Breadcrumb>
-                      {row.path.split("\\").map((r) => (
-                        <Breadcrumb.Item key={Math.random()}>
-                          {r}
-                        </Breadcrumb.Item>
-                      ))}
-                    </Breadcrumb>
-                  ),
-                  action: (
-                    <Tooltip placement="top" title={t("ACTIONS.DELETE")}>
-                      <Button
-                        onClick={() => handleDelete(row.name)}
-                        icon={<DeleteOutlined />}
+    <>
+      <Spin size="large" spinning={loading}>
+        <Main>
+          <Table
+            sticky
+            columns={[
+              {
+                title: t("FIELDS.COMMON.NAME"),
+                dataIndex: "name",
+                width: "20%",
+              },
+              {
+                title: t("FIELDS.COMMON.PATH"),
+                dataIndex: "path",
+                width: "30%",
+              },
+              {
+                align: "center",
+                title: t("FIELDS.COMMON.ACTION"),
+                dataIndex: "action",
+                width: "8%",
+              },
+              {
+                align: "center",
+                title: t("FIELDS.COMMON.ACTIVE"),
+                dataIndex: "active",
+                width: "8%",
+              },
+            ]}
+            dataSource={
+              (!loading &&
+                store.resources &&
+                [...store.resources]
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((row, i) => ({
+                    key: i,
+                    align: "center",
+                    name: row.name,
+                    path: (
+                      <Breadcrumb>
+                        {row.path.split("\\").map((r) => (
+                          <Breadcrumb.Item key={Math.random()}>
+                            {r}
+                          </Breadcrumb.Item>
+                        ))}
+                      </Breadcrumb>
+                    ),
+                    action: (
+                      <Space>
+                        <Tooltip placement="top" title={t("ACTIONS.DELETE")}>
+                          <Button
+                            onClick={() => handleDelete(row.name)}
+                            icon={<DeleteOutlined />}
+                          />
+                        </Tooltip>
+                        <Tooltip placement="top" title={t("ACTIONS.WATCH")}>
+                          <Button
+                            disabled={!row.active}
+                            onClick={() => handleConfig(row.name)}
+                            icon={<BranchesOutlined />}
+                          />
+                        </Tooltip>
+                      </Space>
+                    ),
+                    active: (
+                      <Switch
+                        onChange={(e) => handleActive(row.name, e)}
+                        checked={row.active}
                       />
-                    </Tooltip>
-                  ),
-                  active: (
-                    <Switch
-                      onChange={(e) => handleActive(row.name, e)}
-                      checked={row.active}
-                    />
-                  ),
-                }))) ||
-            []
-          }
-          pagination={false}
-          scroll={{ y: "100%" }}
-        />
-      </Main>
-    </Spin>
+                    ),
+                  }))) ||
+              []
+            }
+            pagination={false}
+            scroll={{ y: "100%" }}
+          />
+        </Main>
+      </Spin>
+      {/* Configuration Modal */}
+      <Modal
+        title={t("DIALOGS.RESOURCE_CONFIG_HEADER", {
+          resource: configurating.resource,
+        })}
+        open={configurating.open}
+        onCancel={handleReset}
+        onOk={handleSaveConfig}
+        okText={t("ACTIONS.SAVE")}
+      >
+        <FullSpace direction="vertical">
+          <Row gutter={[16, 0]}>
+            <Col flex="auto">
+              <Field
+                help={t("HELP.RESOURCES_COMMAND") as string}
+                label={t("FIELDS.COMMON.COMMAND")}
+                component={
+                  <Input
+                    value={configuratingFields.command}
+                    onInput={(e) =>
+                      handleUpdateConfigField("command", e.currentTarget.value)
+                    }
+                    placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
+                  />
+                }
+              />
+            </Col>
+            <Col flex="none">
+              <Field
+                label={t("FIELDS.COMMON.ACTIVE")}
+                isSwitch
+                component={
+                  <Switch
+                    checked={configuratingFields.active}
+                    onChange={(state) =>
+                      handleUpdateConfigField("active", state)
+                    }
+                  />
+                }
+              />
+            </Col>
+          </Row>
+          <Row gutter={[16, 0]}>
+            <Col flex="auto">
+              <Field
+                help={t("HELP.RESOURCES_PATH(S)") as string}
+                label={t("FIELDS.COMMON.PATH(S)")}
+                component={
+                  <Select
+                    mode="tags"
+                    open={false}
+                    placeholder={t("PLACEHOLDERS.TYPEHERE") as string}
+                    value={configuratingFields.paths}
+                    onDeselect={(e) =>
+                      handleUpdateConfigField(
+                        "paths",
+                        configuratingFields.paths.filter(
+                          (path: string) => path !== e
+                        )
+                      )
+                    }
+                    onSelect={(e) =>
+                      handleUpdateConfigField("paths", [
+                        ...configuratingFields.paths,
+                        e,
+                      ])
+                    }
+                  />
+                }
+              />
+            </Col>
+          </Row>
+        </FullSpace>
+      </Modal>
+    </>
   );
 };
 

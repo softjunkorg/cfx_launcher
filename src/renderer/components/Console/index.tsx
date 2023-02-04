@@ -79,6 +79,14 @@ const Console: FC = () => {
       }
     );
 
+    // Listening to local resources update
+    const localResourcesChange = application.listen(
+      ResourcesEvents.LOCAL_CHANGE,
+      (event, resource: string) => {
+        message.info(t("MESSAGES.RESOURCE_CHANGED", { resource }));
+      }
+    );
+
     // Listening to local resources unlink
     const localResourcesUnlink = application.listen(
       ResourcesEvents.LOCAL_UNLINK,
@@ -101,6 +109,7 @@ const Console: FC = () => {
       application.off(InstanceEvents.MESSAGE, messageListener);
       application.off(InstanceEvents.STOPPED, stopListener);
       application.off(ResourcesEvents.LOCAL_UPDATE, localResourcesUpdate);
+      application.off(ResourcesEvents.LOCAL_CHANGE, localResourcesChange);
       application.off(ResourcesEvents.LOCAL_UNLINK, localResourcesUnlink);
       application.off(ResourcesEvents.DELETED, localResourcesDeleted);
     };

@@ -1,5 +1,5 @@
 import Store from "electron-store";
-import { ICustomField } from "types";
+import { ICustomField, IResource } from "types";
 import config from "../../config";
 
 const store = new Store<typeof config.sharedStore.default>({
@@ -19,6 +19,23 @@ const store = new Store<typeof config.sharedStore.default>({
       }
 
       updStore.set("instanceConfig.custom_fields", newFields);
+    },
+    "0.0.2": (updStore) => {
+      let newResources;
+      const resources = updStore.get("resources") as IResource[];
+
+      if (resources) {
+        newResources = resources.map((field) => ({
+          ...field,
+          watchOptions: {
+            command: "ensure {{name}}",
+            paths: [],
+            active: false,
+          },
+        }));
+      }
+
+      if (newResources) updStore.set("resources", newResources);
     },
   },
 });
