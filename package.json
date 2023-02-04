@@ -12,6 +12,7 @@
     "redm",
     "cfx"
   ],
+  "version": "0.3.3",
   "homepage": "https://github.com/softjunkorg/cfx_launcher#readme",
   "bugs": {
     "url": "https://github.com/softjunkorg/cfx_launcher/issues"

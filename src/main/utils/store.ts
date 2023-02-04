@@ -20,7 +20,7 @@ const store = new Store<typeof config.sharedStore.default>({
 
       updStore.set("instanceConfig.custom_fields", newFields);
     },
-    "0.0.2": (updStore) => {
+    "0.3.3": (updStore) => {
       let newResources;
       const resources = updStore.get("resources") as IResource[];
 

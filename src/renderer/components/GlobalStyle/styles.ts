@@ -41,6 +41,7 @@ export const Main = createGlobalStyle`
     display: flex;
     flex-flow: column;
     height: 100%;
+    user-select: none;
   }
 
   .ant-tabs-content-holder {

@@ -6,6 +6,9 @@ import { directories, store } from "./utils";
 import AutoUpdater from "./handlers/autoupdate";
 import config from "../config";
 
+// Single instance
+app.requestSingleInstanceLock();
+
 // Check debug
 const isDebug =
   process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";

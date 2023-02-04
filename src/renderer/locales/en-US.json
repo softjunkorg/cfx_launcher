@@ -2,6 +2,7 @@
   "ACTIONS": {
     "BROWSE": "Browse",
     "CANCEL": "Cancel",
+    "CONFIG": "Config",
     "DELETE": "Delete",
     "EDIT": "Edit",
     "NEW_FIELD": "New Field",
@@ -12,7 +13,6 @@
     "START": "Start",
     "STOP": "Stop",
     "UPLOAD": "Upload",
-    "CONFIG": "Config",
     "WATCH": "Watch Options"
   },
   "BOOLEAN": {
@@ -27,18 +27,14 @@
     "CREATE_CUSTOM_FIELD_HEADER": "Custom field",
     "DELETE_CUSTOM_FIELD_BODY": "Do you really want to delete the field {{field}}?",
     "DELETE_CUSTOM_FIELD_HEADER": "Custom field",
+    "RESOURCE_CONFIG_HEADER": "Watch options of {{resource}}",
     "RESOURCE_DELETE_BODY": "Do you really want to delete the resource {{resource}}?",
     "RESOURCE_DELETE_HEADER": "Delete Action",
     "SERVER_RESTART_BODY": "Do you really want to restart the server?",
     "SERVER_RESTART_HEADER": "Restart Action",
     "SERVER_STOP_BODY": "Do you really want to stop the server?",
     "SERVER_STOP_HEADER": "Stop Action",
-    "WANT_TO": "Do you want to {{action}}?",
-    "RESOURCE_CONFIG_HEADER": "Watch options of {{resource}}"
-  },
-  "HELP": {
-    "RESOURCES_COMMAND": "The <u>{{name}}</u> is a built-in variable that refers to the resource name",
-    "RESOURCES_PATH(S)": "Place here folders that are <b>inside</b> of the resource folder"
+    "WANT_TO": "Do you want to {{action}}?"
   },
   "ERRORS": {
     "INSTANCE": {
@@ -59,12 +55,12 @@
     "COMMON": {
       "ACTION": "Action",
       "ACTIVE": "Active",
+      "COMMAND": "Command",
       "NAME": "Name",
       "PATH": "Path",
       "PATH(S)": "Path(s)",
-      "VALUE": "Value",
       "PRIVATE": "Private",
-      "COMMAND": "Command"
+      "VALUE": "Value"
     },
     "SETTINGS": {
       "ARTIFACTS_FOLDER": "Artifacts Folder",
@@ -75,6 +71,10 @@
   },
   "HEADER": {
     "TITLE": "Launcher"
+  },
+  "HELP": {
+    "RESOURCES_COMMAND": "The <u>{{name}}</u> is a built-in variable that refers to the resource name",
+    "RESOURCES_PATH(S)": "Place here folders that are <b>inside</b> of the resource folder"
   },
   "LANGUAGES": {
     "en-US": {
@@ -89,9 +89,10 @@
   "MESSAGES": {
     "NEW_RESOURCES": "Added {{count}} new resource(s) to the list.",
     "RESOURCE_ADDED": "Added {{resource}} resource to the list.",
-    "RESOURCE_DELETED": "Resource {{resource}} was deleted.",
     "RESOURCE_CHANGED": "Resource {{resource}} was changed.",
+    "RESOURCE_DELETED": "Resource {{resource}} was deleted.",
     "RETIRED_RESOURCES": "Removed {{count}} deleted resource(s) to the list.",
+    "SERVER_AUTHENTICATED": "Server authenticated on Nucleus",
     "SERVER_ERROR": "The server threw an exception. Code: {{code}}",
     "SERVER_EXECUTE_COMMAND_ERROR": "An error happened on the command execution.",
     "SERVER_EXECUTE_COMMAND_SUCCESS": "The command was successfully executed.",
@@ -100,13 +101,12 @@
     "SERVER_REFRESH_SUCCESS": "Refreshing the server",
     "SERVER_RESTART_ERROR": "An error happened on the restart process.",
     "SERVER_RESTART_SUCCESS": "Restarting the server",
+    "SERVER_STARTED": "Server started",
     "SERVER_START_ERROR": "An error happened on the start process.",
     "SERVER_START_SUCCESS": "Starting the server",
-    "SERVER_STARTED": "Server started",
-    "SERVER_AUTHENTICATED": "Server authenticated on Nucleus",
+    "SERVER_STOPPED": "The server is currently stopped.",
     "SERVER_STOP_ERROR": "An error happened on the stop process.",
     "SERVER_STOP_SUCCESS": "Stopping the server",
-    "SERVER_STOPPED": "The server is currently stopped.",
     "UNEXPECTED_ERROR": "Unexpected error happened. {{error}}"
   },
   "MODE": {

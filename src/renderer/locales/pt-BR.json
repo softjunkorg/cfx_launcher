@@ -2,16 +2,18 @@
   "ACTIONS": {
     "BROWSE": "Procurar",
     "CANCEL": "Cancelar",
+    "CONFIG": "Config",
     "DELETE": "Deletar",
     "EDIT": "Editar",
     "NEW_FIELD": "Nova Informação",
-    "UPLOAD": "Upload",
     "REFRESH": "Atualizar",
     "RESTART": "Reiniciar",
     "SAVE": "Salvar",
     "SEND": "Enviar",
     "START": "Iniciar",
-    "STOP": "Desligar"
+    "STOP": "Desligar",
+    "UPLOAD": "Upload",
+    "WATCH": "Opções Watch"
   },
   "BOOLEAN": {
     "FALSE": "Falso",
@@ -25,6 +27,7 @@
     "CREATE_CUSTOM_FIELD_HEADER": "Informação customizada",
     "DELETE_CUSTOM_FIELD_BODY": "Você realmente deseja deletar a informação {{field}}?",
     "DELETE_CUSTOM_FIELD_HEADER": "Informação customizada",
+    "RESOURCE_CONFIG_HEADER": "Opções watch {{resource}}",
     "RESOURCE_DELETE_BODY": "Você realmente deseja deletar a resource {{resource}}?",
     "RESOURCE_DELETE_HEADER": "Deletar",
     "SERVER_RESTART_BODY": "Você realmente deseja reiniciar o servidor?",
@@ -52,8 +55,10 @@
     "COMMON": {
       "ACTION": "Ação",
       "ACTIVE": "Ativo",
+      "COMMAND": "Comando",
       "NAME": "Nome",
       "PATH": "Caminho",
+      "PATH(S)": "Caminho(s)",
       "PRIVATE": "Privado",
       "VALUE": "Valor"
     },
@@ -66,6 +71,10 @@
   },
   "HEADER": {
     "TITLE": "Launcher"
+  },
+  "HELP": {
+    "RESOURCES_COMMAND": "O <u>{{name}}</u> é uma variável integrada que se refere ao nome da resource",
+    "RESOURCES_PATH(S)": "Coloque aqui as pastas que estão <b>dentro</b> da pasta da resource"
   },
   "LANGUAGES": {
     "en-US": {
@@ -80,23 +89,24 @@
   "MESSAGES": {
     "NEW_RESOURCES": "Foi adicionado {{count}} nova(s) resource(s) para a lista.",
     "RESOURCE_ADDED": "Foi adicionado a resource {{resource}} para a lista.",
+    "RESOURCE_CHANGED": "A resource {{resource}} mudou.",
+    "RESOURCE_DELETED": "Resource {{resource}} foi deletada.",
     "RETIRED_RESOURCES": "Foi removido {{count}} resources deletadas da lista.",
     "SERVER_AUTHENTICATED": "Server autenticado ao Nucleus",
-    "SERVER_MESSAGES_OPTIMIZATION": "Algumas mensagens foram omitidas pela otimização",
-    "RESOURCE_DELETED": "Resource {{resource}} foi deletada.",
     "SERVER_ERROR": "Ocorreu um erro no servidor. Código: {{code}}",
     "SERVER_EXECUTE_COMMAND_ERROR": "Ocorreu um erro na execução do comando.",
     "SERVER_EXECUTE_COMMAND_SUCCESS": "O comando foi executado com sucesso.",
+    "SERVER_MESSAGES_OPTIMIZATION": "Algumas mensagens foram omitidas pela otimização",
     "SERVER_REFRESH_ERROR": "Algum erro ocorreu ao atualizar o servidor.",
     "SERVER_REFRESH_SUCCESS": "Atualizando o servidor",
     "SERVER_RESTART_ERROR": "Algum erro ocorreu ao reiniciar o servidor.",
     "SERVER_RESTART_SUCCESS": "Reiniciando o servidor",
+    "SERVER_STARTED": "Servidor iniciado.",
     "SERVER_START_ERROR": "Algum erro ocorreu ao iniciar o servidor.",
     "SERVER_START_SUCCESS": "Iniciando o servidor",
-    "SERVER_STARTED": "Servidor iniciado.",
+    "SERVER_STOPPED": "O servidor está atualmente desligado",
     "SERVER_STOP_ERROR": "Algum erro ocorreu ao desligar o servidor.",
     "SERVER_STOP_SUCCESS": "Desligando o servidor",
-    "SERVER_STOPPED": "O servidor está atualmente desligado",
     "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. {{error}}"
   },
   "MODE": {
