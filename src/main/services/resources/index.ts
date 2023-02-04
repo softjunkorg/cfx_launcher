@@ -223,6 +223,31 @@ function listenToResourceState() {
     const inspect = newValue?.filter((r) =>
       oldValue?.find((d) => d.name === r.name)
     );
+
+    // Mapping inspect
+    inspect?.map((element) => {
+      if (
+        oldValue?.find(
+          (r) => r.name === element.name && r.active !== element.active
+        )
+      ) {
+        // Checking element
+        if (element) {
+          if (element.active) {
+            events.emit(
+              InstanceEvents.EXECUTE_COMMAND,
+              `ensure ${element.name}`
+            );
+          } else {
+            events.emit(InstanceEvents.EXECUTE_COMMAND, `stop ${element.name}`);
+          }
+        }
+
+        return true;
+      }
+
+      return false;
+    });
   });
 
   events.on(InstanceEvents.STOPPED, unsubscribe);
