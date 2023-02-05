@@ -10,6 +10,9 @@ import { useInstanceStatus, useLoadingFields } from "renderer/hooks";
 import { application, events } from "renderer/services";
 import { useStoreActions } from "renderer/store/actions";
 import { SettingsEvents } from "types";
+import { HexColorPicker } from "react-colorful";
+import { themeData } from "renderer/store/state";
+import { useRecoilState } from "recoil";
 import { Main } from "../sharedStyles";
 import { Side } from "./styles";
 
@@ -49,6 +52,7 @@ const Settings: FC & ISettingsExtraActions = () => {
   const { t } = useTranslation();
   const { store } = useStoreActions();
   const { isStarting, isRunning } = useInstanceStatus();
+  const [theme, setTheme] = useRecoilState(themeData);
   const [replicated, setReplicated] = useState<any>(store.settings);
   const [loading, setLoading] = useLoadingFields({
     artifactsFolder: false,
@@ -125,6 +129,19 @@ const Settings: FC & ISettingsExtraActions = () => {
   useEffect(() => {
     if (store.settings !== replicated) {
       setReplicated(store.settings);
+    }
+
+    // Setting theme color
+    if (store.settings.themeColor) {
+      if (theme.token?.colorPrimary !== store.settings.themeColor) {
+        setTheme((th) => ({
+          ...th,
+          token: {
+            ...th.token,
+            colorPrimary: store.settings.themeColor as unknown as string,
+          },
+        }));
+      }
     }
   }, [store.settings]);
 
@@ -209,12 +226,10 @@ const Settings: FC & ISettingsExtraActions = () => {
           <Field
             label={t("FIELDS.SETTINGS.THEME_COLOR")}
             component={
-              <CountrySelect
-                placeholder={t("PLACEHOLDERS.SELECTHERE") as string}
-                countries={config.languages.map((c) => c.split("-")[1])}
-                labels={handleLanguageLabels()}
-                value={replicated.language}
-                onChange={(e) => handleReplicate({ language: e })}
+              <HexColorPicker
+                color={replicated.themeColor}
+                style={{ width: "100%" }}
+                onChange={(e) => handleReplicate({ themeColor: e })}
               />
             }
           />

@@ -48,6 +48,7 @@ const config = {
         resourcesFolder: null,
         cacheFolder: null,
         instanceArguments: null,
+        themeColor: null,
         language: "en-US",
       },
       app: {

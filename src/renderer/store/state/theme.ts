@@ -1,8 +1,7 @@
-import { ThemeConfig } from "antd/es/config-provider/context";
 import { theme } from "antd";
 import { atom } from "recoil";
 
-export const themeData = atom<ThemeConfig>({
+export const themeData = atom({
   key: "themeData",
   default: {
     token: {
