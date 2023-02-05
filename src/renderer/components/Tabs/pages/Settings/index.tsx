@@ -160,7 +160,6 @@ const Settings: FC & ISettingsExtraActions = () => {
               />
             }
           />
-
           {/* Resources Folder */}
           <Field
             label={t("FIELDS.SETTINGS.RESOURCES_FOLDER")}
@@ -176,7 +175,6 @@ const Settings: FC & ISettingsExtraActions = () => {
               />
             }
           />
-
           {/* Instance Arguments */}
           <Field
             label={t("FIELDS.SETTINGS.INSTANCE_ARGUMENTS")}
@@ -197,6 +195,19 @@ const Settings: FC & ISettingsExtraActions = () => {
           {/* Language */}
           <Field
             label={t("FIELDS.SETTINGS.LANGUAGE")}
+            component={
+              <CountrySelect
+                placeholder={t("PLACEHOLDERS.SELECTHERE") as string}
+                countries={config.languages.map((c) => c.split("-")[1])}
+                labels={handleLanguageLabels()}
+                value={replicated.language}
+                onChange={(e) => handleReplicate({ language: e })}
+              />
+            }
+          />
+          {/* Theme Color */}
+          <Field
+            label={t("FIELDS.SETTINGS.THEME_COLOR")}
             component={
               <CountrySelect
                 placeholder={t("PLACEHOLDERS.SELECTHERE") as string}

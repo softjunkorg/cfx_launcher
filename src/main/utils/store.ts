@@ -37,6 +37,10 @@ const store = new Store<typeof config.sharedStore.default>({
 
       if (newResources) updStore.set("resources", newResources);
     },
+    "0.4.0": (updStore) => {
+      const settings = updStore.get("settings");
+      updStore.set("settings", { ...settings, themeColor: "#4a79ff" });
+    },
   },
 });
 

@@ -1,8 +1,8 @@
 # Olá, viajante! 👋
 
-Seja bem-vindo ao Cfx Launcher, criado pela equipe Softjunk. Este launcher foi projetado para facilitar a inicialização e o gerenciamento do seu próprio servidor no FiveM 🖥️
+Seja bem-vindo ao Cfx Launcher, criado pela equipe Softjunk. Este launcher foi projetado para facilitar a inicialização e o gerenciamento do seu próprio servidor no FiveM ou no RedM 🖥️
 
-![Window Preview](https://i.postimg.cc/Hx9gC4LT/window.png)
+![Window Preview](https://i.postimg.cc/2yYSzrK6/ezgif-com-gif-maker.gif)
 
 ## Porque usar o launcher? ⭐
 
@@ -10,6 +10,7 @@ Seja bem-vindo ao Cfx Launcher, criado pela equipe Softjunk. Este launcher foi p
 - Atualizações automáticas ⬆️
 - Configurações personalizáveis ⚙️
 - Suporte para vários servidores 💂
+- Reinicialização automática de resources 💡
 - Ferramentas de gerenciamento de servidor integradas 🔧
 
 ## Instalação 💾
@@ -28,4 +29,4 @@ Se você encontrar algum problema com o Cfx Launcher, verifique as perguntas fre
 
 ## Conclusão 🎉
 
-Esperamos que você goste de usar o Cfx Launcher da Softjunk Team. Se você tiv vvber alguma sugestão ou feedback, informe-nos 😀. Estamos constantemente trabalhando para melhorar o launcher e torná-lo a melhor experiência para nossos usuários.
+Esperamos que você goste de usar o Cfx Launcher da Softjunk Team. Se você tiver alguma sugestão ou feedback, informe-nos 😀. Estamos constantemente trabalhando para melhorar o launcher e torná-lo a melhor experiência para nossos usuários.

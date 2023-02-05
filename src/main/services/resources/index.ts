@@ -82,7 +82,7 @@ async function startWatching(_: any, tempResources: TempResources) {
     resources = store.get("resources") as IResource[];
 
     // Creating watchOptions paths
-    const watchPaths = {} as { [x: string]: string };
+    const watchPaths = {} as { [x: string]: string[] };
     const watchResources = resources.filter(
       (r) =>
         r.active === true &&
@@ -94,7 +94,8 @@ async function startWatching(_: any, tempResources: TempResources) {
     watchResources.map((r) => {
       if (r?.watchOptions.paths) {
         r?.watchOptions.paths.map((p) => {
-          watchPaths[p] = r.name;
+          if (!watchPaths[r.name]) watchPaths[r.name] = [];
+          watchPaths[r.name].push(p);
           return true;
         });
       }
@@ -103,28 +104,32 @@ async function startWatching(_: any, tempResources: TempResources) {
     });
 
     Object.entries(watchPaths).map((row) => {
-      const resource = resources.find((r) => r.name === row[1]);
+      const resource = resources.find((r) => r.name === row[0]);
       const resourcePath = path.resolve(folder, resource?.path || "");
 
       // Checking the resource
       if (fs.existsSync(resourcePath)) {
-        if (
-          path.resolve(change).startsWith(path.resolve(resourcePath, row[0]))
-        ) {
-          events.emit(InstanceEvents.EXECUTE_COMMAND, "refresh");
-          events.emit(
-            InstanceEvents.EXECUTE_COMMAND,
-            resource?.watchOptions.command.replace("{{name}}", resource?.name)
-          );
+        for (let index = 0; row[1].length > index; index += 1) {
+          if (
+            path
+              .resolve(change)
+              .startsWith(path.resolve(resourcePath, row[1][index]))
+          ) {
+            events.emit(InstanceEvents.EXECUTE_COMMAND, "refresh");
+            events.emit(
+              InstanceEvents.EXECUTE_COMMAND,
+              resource?.watchOptions.command.replace("{{name}}", resource?.name)
+            );
 
-          // Sending message to front
-          window.request(ResourcesEvents.LOCAL_CHANGE, resource?.name);
+            // Sending message to front
+            window.request(ResourcesEvents.LOCAL_CHANGE, resource?.name);
 
-          return true;
+            break;
+          }
         }
       }
 
-      return null;
+      return true;
     });
   });
 
