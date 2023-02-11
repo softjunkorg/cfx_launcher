@@ -16,6 +16,11 @@ export const Main = createGlobalStyle`
   // Custom Scrollbar
   ::-webkit-scrollbar {
     width: 3px;
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   ::-webkit-scrollbar-track {

@@ -37,15 +37,17 @@ const Console: FC = () => {
   const { message } = App.useApp();
   const { executeCommand } = useInstanceActions();
   const { isStarting, isRunning, isStopped } = useInstanceStatus();
-  const [, setStatus] = useRecoilState(instanceStatus);
   const [messages, setMessages] = useState<IInstanceMessage[]>([]);
   const [command, setCommand] = useState<string>("");
   const [maxOpen, setMaxOpen] = useState<boolean>(false);
+  const [, setStatus] = useRecoilState(instanceStatus);
   const [sessionCommands, setSessionCommands] = useState({
     index: null as number | null,
     commands: [] as string[],
   });
+  const [autoScroll, setAutoScroll] = useState<boolean>(true);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const mensagerRef = useRef<InputRef>(null);
 
   // Listen to messages update
@@ -61,6 +63,19 @@ const Console: FC = () => {
       InstanceEvents.MESSAGE,
       (event, data: IInstanceMessage) => {
         setMessages((store) => [...store, data]);
+
+        /* Changing the autoScroll state */
+        if (
+          messagesRef.current &&
+          Math.floor(
+            messagesRef.current?.scrollTop +
+              messagesRef.current?.getBoundingClientRect().height +
+              1
+          ) === messagesRef.current?.scrollHeight
+        )
+          return setAutoScroll(true);
+
+        return setAutoScroll(false);
       }
     );
 
@@ -117,8 +132,8 @@ const Console: FC = () => {
 
   // Updating messages last position
   useEffect(() => {
-    lastMessageRef?.current?.scrollIntoView();
-  });
+    if (autoScroll) lastMessageRef?.current?.scrollIntoView();
+  }, [messages]);
 
   // Optimizing the console
   useEffect(() => {
@@ -138,13 +153,20 @@ const Console: FC = () => {
   const handleSendCommand = async () => {
     if (command.length > 0) {
       await executeCommand(command);
+      const data = {
+        index: null,
+        commands: sessionCommands.commands,
+      };
 
       // Updating session commands
-      setSessionCommands((obj) => ({
-        index: null,
-        commands: [...obj.commands, command],
-      }));
+      if (
+        command !==
+        sessionCommands.commands[sessionCommands.commands.length - 1]
+      )
+        data.commands = [...data.commands, command];
 
+      // Updating cache
+      setSessionCommands(data);
       setCommand("");
     }
   };
@@ -230,7 +252,7 @@ const Console: FC = () => {
   return (
     <Main>
       {/* Messages */}
-      <Messages scroll={!isStopped}>
+      <Messages scroll={!isStopped} ref={messagesRef}>
         {/* Stop Message */}
         {isStopped && (
           <StoppedMessage>

@@ -27,6 +27,7 @@ export const Messages = styled.div<IMessagesProps>`
   overflow-y: ${(props) => (props.scroll ? "scroll" : "hidden")};
   white-space: pre-wrap;
   position: relative;
+  word-wrap: break-word;
 
   & code span {
     font-size: 16px;
