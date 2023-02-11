@@ -15,7 +15,19 @@ import {
   TempConfig,
   TempResources,
 } from "../../handlers/instance";
-import { ansi, cache, events, store, wait, window } from "../../utils";
+import {
+  ansi,
+  cache,
+  events,
+  notifications,
+  store,
+  wait,
+  window,
+} from "../../utils";
+
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "assets")
+  : path.join(__dirname, "../../../../assets");
 
 let instanceProcess: TInstanceProcess;
 let instanceStatus: InstanceStatus = InstanceStatus.STOPPED;
@@ -149,6 +161,13 @@ async function startInstance() {
             content: { icon: "success", message: "Server authenticated" },
           } as IInstanceMessage);
         }, 5);
+
+        // Notificating
+        notifications.create({
+          title: "Terminal message",
+          body: "Server is running!",
+          icon: path.join(RESOURCES_PATH, "check-icon.png"),
+        });
       }
 
       // Sending the data
@@ -168,6 +187,13 @@ async function startInstance() {
   const onFinish = async (code: number) => {
     if (instanceProcess) {
       window.request(InstanceEvents.ERROR, code);
+
+      // Notificating
+      notifications.create({
+        title: "Terminal message",
+        body: `The server threw an exception. Code: ${code}`,
+        icon: path.join(RESOURCES_PATH, "error-icon.png"),
+      });
 
       // Cleaning the tasks
       if (instanceStatus === InstanceStatus.STARTING) {

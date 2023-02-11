@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Notification } from "electron";
 import path from "path";
-import { directories, store } from "./utils";
+import { directories, notifications, store } from "./utils";
 import AutoUpdater from "./handlers/autoupdate";
 import config from "../config";
 
