@@ -86,8 +86,8 @@ async function startWatching(_: any, tempResources: TempResources) {
     const watchResources = resources.filter(
       (r) =>
         r.active === true &&
-        r?.watchOptions.active === true &&
-        r?.watchOptions.paths.length > 0
+        r?.watchOptions?.active === true &&
+        r?.watchOptions?.paths.length > 0
     );
 
     // Mapping resources that need to watch
