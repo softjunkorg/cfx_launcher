@@ -114,7 +114,7 @@ class TempConfig {
           // eslint-disable-next-line no-fallthrough
           default:
             if (isCustomField)
-              if (isPrivateField) prefix = "set ";
+              if (isPrivateField) prefix = "setr ";
               else prefix = "sets ";
             break;
         }
